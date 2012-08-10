@@ -1,0 +1,30 @@
+#Configurator file will allow you to configure all the parameters required by apkeval.pl (core part of A S E F) so user doesn't need to re-enter every time test is run 
+#Please follow each of the sample format and provide the parameters
+
+#Name of the virtual device created by user on which all the tests will be run
+#Default AVD = avd_test 
+Default AVD =  
+
+#Google Safe Browsing API Key
+#Google Safe Browsing API = ABQIAAAAo85Inuxqqg6th2Wo1234yxR6oJp44IDGFsHRDnasTNl3gDmneG
+Google Safe Browsing API =  
+
+#IP address of the local machine on which A S E F is running, given by an interface on which packets will be captured
+#Host IP = 10.0.0.4 
+Host IP =  
+
+#Interface on which packets will be captured
+#interface = en1
+interface =  
+
+#If user choose to bypass virtual device and run all tests on physical device, please provide device ID on which all tests will run
+#AD = 3441F11B71E600EC 
+AD =  
+
+#Marination time Tm in seconds for tuning the test cycle
+#Tm = 10
+Tm =  
+
+#No of gestures to be sent to an app during activity mode inside a test cycle
+#RGC = 75 
+RGC =  

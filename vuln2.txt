@@ -1,0 +1,130 @@
+#format of an entry
+
+#################################################################
+#pkg:'' os:'' hvv:'' hpv:'' lvv:'0' info:'' sev:'' cve:'' noi:''
+#################################################################
+
+(1) pkg:'com.adobe.flashplayer' os:'android 2.x or 3.x' hvv:'' hpv:'11.1.111.9' lvv:'0' info:'"object confusion vulnerability" - allows remote code execution' sev:'HIGH' cve:'CVE-2012-0779' noi:'575,913'
+#
+(2) pkg:'com.adobe.flashplayer' os:'android 4.x' hvv:'' hpv:'11.1.115.8' lvv:'0' info:'"object confusion vulnerability" - allows remote code execution' sev:'HIGH' cve:'CVE-2012-0779' noi:'575,913'
+#
+#CVE-2012-2217 not entered
+#
+#CVE-2012-1244 not entered
+#
+(3) pkg:'org.mozilla.firefox' os:'' hvv:'' hpv:'10.0.4' lvv:'0' info:'"Denial of Service" or "possibly execute arbitrary code via a crafted TrueType font" (FreeType before 2.4.9, as used in Mozilla Firefox Mobile before 10.0.4)' sev:'HIGH' cve:'CVE-2012-1128' noi:'62,434'
+#
+(4) pkg:'com.studiohitori.twitrocker2' os:'' hvv:'' hpv:'1.0.23' lvv:'0' info:'"vulnerability in WebView class" - allows remote attachers to obtain sensitive information' sev:'MEDIUM' cve:'CVE-2012-1243' noi:'99'
+#
+(5) pkg:'com.adobe.flashplayer' os:'android 2.x or 3.x' hvv:'' hpv:'11.1.111.8' lvv:'0' info:'"vulnerability in NetStream class in Adobe Flash Player" - allows attackers to execute arbitrary code or cause a denial of service (memory corruption) via unspecified vectors' sev:'HIGH' cve:'CVE-2012-0773' noi:'575,913'
+#
+(6) pkg:'jp.r246.twicca' os:'' hvv:'0.9.30' hpv:'' lvv:'0.7.0' info:'"does not properly restrict the use of network previlages" - allows attackers to read media files on SD card' sev:'MEDIUM' cve:'CVE-2012-0326' noi:'40,155'
+#
+(7) pkg:'com.access_company.android.nflifebrowser.lite' os:'' hvv:'2.2.0' hpv:'' lvv:'2.2.0' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1485' noi:'1,394'
+#
+(8) pkg:'com.access_company.android.nflifebrowser.lite' os:'' hvv:'2.3.0' hpv:'' lvv:'2.3.0' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1485' noi:'1,394'
+#
+(9) pkg:'cn.com.wali.walisms' os:'' hvv:'2.9.2' hpv:'' lvv:'2.9.2' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1484' noi:'295'
+#
+(10) pkg:'cn.com.wali.walisms' os:'' hvv:'3.7.0' hpv:'' lvv:'3.7.0' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1484' noi:'295'
+#
+(11) pkg:'com.gmail.zbnetium' os:'' hvv:'1.12.20110409.1' hpv:'' lvv:'1.12.20110409.1' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1484' noi:'54'
+#
+(12) pkg:'com.cootek.smartdialer' os:'' hvv:'3.3.1' hpv:'' lvv:'3.3.1' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1482' noi:'8,967'
+#
+(13) pkg:'com.cootek.smartdialer' os:'' hvv:'4.0.1' hpv:'' lvv:'4.0.1' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1482' noi:'8,967'
+#
+(14) pkg:'com.app.android.textdroid' os:'' hvv:'2.5.2' hpv:'' lvv:'2.5.2' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1481' noi:'272'
+#
+(15) pkg:'org.mozilla.firefox' os:'' hvv:'10.0.3' hpv:'' lvv:'0' info:'"vulnerability in nsWindow implementation in the browser engine in Mozilla Firefox" - allows remote attackers to cause a denial of service (memory corruption and application crash) or possibly execute arbitrary code via unknown vectors' sev:'HIGH' cve:'CVE-2012-0463' noi:'62,434'
+#
+(16) pkg:'com.pansi.msg' os:'' hvv:'1.97' hpv:'' lvv:'1.97' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1480' noi:'14,829'
+#
+(17) pkg:'com.pansi.msg' os:'' hvv:'2.01' hpv:'' lvv:'2.01' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1480' noi:'14,829'
+#
+(18) pkg:'com.pansi.msg' os:'' hvv:'2.07' hpv:'' lvv:'2.07' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1480' noi:'14,829'
+#
+(19) pkg:'com.movester.quickcontact' os:'' hvv:'1.8.2' hpv:'' lvv:'1.8.2' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1479' noi:'4,618'
+#
+(20) pkg:'com.blovestorm' os:'' hvv:'2.2.0' hpv:'' lvv:'2.2.0' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1478' noi:'2,994'
+#
+(21) pkg:'com.blovestorm' os:'' hvv:'3.2.1' hpv:'' lvv:'3.2.1' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1478' noi:'2,994'
+#
+(22) pkg:'mci.cnectd' os:'' hvv:'3.1.0' hpv:'' lvv:'3.1.0' info:'' sev:'HIGH' cve:'CVE-2012-1477' noi:'756'
+#
+(23) pkg:'com.kkliaotian.android' os:'' hvv:'4.0.0' hpv:'' lvv:'4.0.0' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1476' noi:'50'
+#
+(24) pkg:'com.iskoot.yagatta.yagattatalk' os:'' hvv:'1.00.01.08' hpv:'' lvv:'1.00.01.08' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1475' noi:'590'
+#
+(25) pkg:'com.snda.youni' os:'' hvv:'2.1.0c' hpv:'' lvv:'2.1.0c' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1474' noi:'916'
+#
+(26) pkg:'com.snda.youni' os:'' hvv:'2.1.0d' hpv:'' lvv:'2.1.0d' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1474' noi:'916'
+#
+(27) pkg:'com.tinycouch.android.freepassword' os:'' hvv:'1.64' hpv:'' lvv:'1.64' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1409' noi:'77'
+#
+(28) pkg:'com.cc.applock' os:'' hvv:'1.7.6' hpv:'' lvv:'1.7.5' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1408' noi:'15,195'
+#
+(29) pkg:'com.gau.go.launcherex.gowidget.smswidget' os:'' hvv:'1.9' hpv:'' lvv:'1.9' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1407' noi:'9,258'
+#
+(30) pkg:'com.gau.go.launcherex.gowidget.smswidget' os:'' hvv:'2.1' hpv:'' lvv:'2.1' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1407' noi:'9,258'
+#
+(31) pkg:'com.gau.go.launcherex.gowidget.smswidget' os:'' hvv:'2.3' hpv:'' lvv:'2.3' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1407' noi:'9,258'
+#
+(32) pkg:'com.gau.go.launcherex.gowidget.bookmark' os:'' hvv:'1.1' hpv:'' lvv:'1.1' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1406' noi:'784'
+#
+(33) pkg:'com.gau.go.launcherex.gowidget.notewidget' os:'' hvv:'1.5' hpv:'' lvv:'1.5' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1405' noi:'5,740'
+#
+(34) pkg:'com.gau.go.launcherex.gowidget.notewidget' os:'' hvv:'1.9' hpv:'' lvv:'1.9' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1405' noi:'5,740'
+#
+(35) pkg:'com.dolphin.browser' os:'' hvv:'2.2' hpv:'' lvv:'2.2' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1404' noi:'21,615'
+#
+(36) pkg:'com.dolphin.browser.cn' os:'' hvv:'6.3.1' hpv:'' lvv:'6.3.1' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1403' noi:''
+#
+(37) pkg:'com.qianxun.yingshi' os:'' hvv:'1.2.3' hpv:'' lvv:'1.2.3' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1402' noi:'3,060'
+#
+(38) pkg:'com.intsig.camscanner' os:'' hvv:'1.2.2.20110823' hpv:'' lvv:'1.2.2.20110823' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1401' noi:'7'
+#
+(38) pkg:'com.intsig.camscanner' os:'' hvv:'1.3.2.20120116' hpv:'' lvv:'1.3.2.20120116' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1401' noi:'7'
+#
+(39) pkg:'lg.uplusbox.pad' os:'' hvv:'2.0.8.4' hpv:'' lvv:'2.0.8.4' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1400' noi:'3,023'
+#
+(40) pkg:'lg.uplusbox' os:'' hvv:'2.0.2' hpv:'' lvv:'2.0.2' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1399' noi:'3,023'
+#
+(41) pkg:'lg.uplusbox' os:'' hvv:'2.0.8.4' hpv:'' lvv:'2.0.8.4' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1399' noi:'3,023'
+#
+(42) pkg:'com.gau.go.launcherex.gowidget.weibowidget' os:'' hvv:'2.4' hpv:'' lvv:'2.4' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1398' noi:''
+#
+(43) pkg:'com.gau.go.launcherex.gowidget.qqweibowidget' os:'' hvv:'1.2' hpv:'' lvv:'1.2' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1397' noi:'7'
+#
+(44) pkg:'com.gau.go.launcherex.gowidget.fbwidget' os:'' hvv:'1.9' hpv:'' lvv:'1.9' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1396' noi:'5,752'
+#
+(45) pkg:'com.gau.go.launcherex.gowidget.fbwidget' os:'' hvv:'2.1' hpv:'' lvv:'2.1' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1396' noi:'5,752'
+#
+(46) pkg:'com.gau.go.launcherex.gowidget.twitterwidget' os:'' hvv:'1.7' hpv:'' lvv:'1.7' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1395' noi:'3,823'
+#
+(47) pkg:'com.gau.go.launcherex.gowidget.twitterwidget' os:'' hvv:'2.1' hpv:'' lvv:'2.1' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1395' noi:'3,823'
+#
+(48) pkg:'com.gau.go.launcherex.gowidget.emailwidget' os:'' hvv:'1.3.1' hpv:'' lvv:'1.3.1' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1394' noi:'2,425'
+#
+(49) pkg:'com.gau.go.launcherex.gowidget.emailwidget' os:'' hvv:'1.8' hpv:'' lvv:'1.8' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1394' noi:'2,425'
+#
+(48) pkg:'com.gau.go.launcherex.gowidget.emailwidget' os:'' hvv:'1.81' hpv:'' lvv:'1.81' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1394' noi:'2,425'
+#
+(50) pkg:'com.jb.gosms' os:'' hvv:'3.72' hpv:'' lvv:'3.72' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1393' noi:'254,451'
+#
+(51) pkg:'com.jb.gosms' os:'' hvv:'4.10' hpv:'' lvv:'4.10' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1393' noi:'254,451'
+#
+(52) pkg:'com.jb.gosms' os:'' hvv:'4.35' hpv:'' lvv:'4.35' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1393' noi:'254,451'
+#
+(53) pkg:'mobi.mgeek.TunnyBrowser' os:'' hvv:'6.2.0' hpv:'' lvv:'6.2.0' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1392' noi:'528,535'
+#
+(54) pkg:'mobi.mgeek.TunnyBrowser' os:'' hvv:'7.2.1' hpv:'' lvv:'7.2.1' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1392' noi:'528,535'
+#
+(53) pkg:'mobi.mgeek.TunnyBrowser' os:'' hvv:'7.3.0' hpv:'' lvv:'7.3.0' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1392' noi:'528,535'
+#
+(53) pkg:'mobi.mgeek.TunnyBrowser' os:'' hvv:'7.4.0' hpv:'' lvv:'7.4.0' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1392' noi:'528,535'
+#
+(54) pkg:'com.innov8tion.isharesync' os:'' hvv:'3.1' hpv:'' lvv:'3.1' info:'"unknown impact and attack vectors"' sev:'' cve:'CVE-2012-1391' noi:'149'
+#
+(55) pkg:'com.bazaarlabs.miso' os:'' hvv:'2.2' hpv:'' lvv:'2.2' info:'"unknown impact and attack vectors"' sev:'HIGH' cve:'CVE-2012-1390' noi:'1,530'
+#
