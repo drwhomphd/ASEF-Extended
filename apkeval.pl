@@ -7,9 +7,9 @@ use URI::Find;
 use URI::Encode;
 
 
-getopts('ha:p:dsen');
+getopts('ha:p:dsenr');
 
-our($opt_h, $opt_a, $opt_p, $opt_d, $opt_s, $opt_e, $opt_n);
+our($opt_h, $opt_a, $opt_p, $opt_d, $opt_s, $opt_e, $opt_n, $opt_r);
 
 print($opt_n);
 
@@ -60,12 +60,19 @@ our $Tm = ""; # merination time of an app. in other words, the amount of time de
  -s "select the scan device to be the device id listed in configurator file"
  -e "extensive scan mode where it will collect kernel logs, memory dump, running process at each stage"
  -n "use a pre-existing snapshot of an emulated virtual devices (disables SDCard creation on startup)"
+ -r "collect data with the SPADE providence system. SPADE must be preinstalled into a snapshot enabled emulated virtual device. REQUIRES -n"
 
 EOF
  exit;
  }
 
 if ($opt_h) { &help; }
+
+# Must enable snapshots to enable SPADE because, currently, SPADE is not
+# built-in to Android and must be installed in to a custom AVD with
+# snapshots enabled (so that state can be saved between boots).
+if ($opt_r && !$opt_n) { &help; } 
+
 if ((!$opt_h) && (!$opt_a) && (!$opt_p) && (!$opt_d) && (!$opt_s) && (!$opt_e) && (!$opt_n)) { &help; }
 
 
@@ -717,6 +724,8 @@ foreach (@ALLFILES)
   }
 
   # NATENOTE: HERE IS PROBABLY WHERE WE WANT TO START SPADE
+  if($opt_r) {
+  }
 
 
 }
@@ -870,10 +879,12 @@ if ($opt_s)
 
    `killall -v tcpdump` ; #user can also run 'cat sudo_password |killall -v tcpdump' if the logged in user doesn't have enough previlages, however this technique inside the script is not recommended for many reasons
 
-   # NATENOTE: Shutdown SPADE
-   # NATENOTE: Pull dot file off from AVD with name the same as the current malware.
-   # NATENOTE: Delete dot file
- 
+    if($opt_r) {
+    # NATENOTE: Shutdown SPADE
+
+    # NATENOTE: Pull dot file off from AVD with name the same as the current malware.
+    # NATENOTE: Delete dot file on the device
+    }
   }
 
  }
