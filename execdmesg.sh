@@ -1,5 +1,5 @@
 #!/bin/bash
 
-./adb shell dmesg >"$@" &
+adb shell dmesg >"$@" &
 PID=$!
 echo $PID
