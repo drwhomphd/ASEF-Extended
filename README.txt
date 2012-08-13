@@ -1,31 +1,44 @@
-Please place this framework inside Android SDK only if you are going to use virtual device for running test, if not it will work from any path on a machine.
-(e.g. path to place ASEF : /Users/someuser/Downloads/android-sdk-macosx/ASEF )
+# Android Security Evaluation Framework Extended #
 
-adb, aapt and emulator are available from Google's Android SDK and packaged along with this framework as standalone utilities.
+Original ASEF release by Parth Patel <>
+Modifications by Nathaniel "DrWhom" Husted <nhusted@gmail.com>
 
-This Framework is currently supported on OS X and Ubuntu.
+## Prequisites ##
+* Ubuntu or Mac OSX
+* Google's Android SDK Tools
+* Google's Android SDK Platform-tools
+* Any Android System Images (for use with the emulator) the user finds useful.
+* Perl (5 revision 12 or higher)
+* Perl Modules: 
+  * Getopt::Std;
+  * URI::Find;
+  * URI::Encode
+* Git
+
+## Installation ##
+
+1. Clone the ASEF Extended repository from Bitbucket
+2. Modify the configurator.txt file for your preferred settings
+3. Execute apkeval.pl
+
+## Details ##
 
 apkeval.pl is the core program of this framework
 
-$ ./apkeval.pl
+    $ ./apkeval.pl
 
- " Welcome to ApkEval ! "
+     " Welcome to ApkEval ! "
 
- -h  Help
- -a "path of an APK file you want to scan"
- -p "path of a directory of APK files you want to scan"
- -d "scan an Android Device you have attached with the machine running ASEF"
- -s "select the scan device to be the device id listed in configurator file"
- -e "extensive scan mode where it will collect kernel logs, memory dump, running process at each stage"
+     -h  Help
+     -a "path of an APK file you want to scan"
+     -p "path of a directory of APK files you want to scan"
+     -d "scan an Android Device you have attached with the machine running ASEF"
+     -s "select the scan device to be the device id listed in configurator file"
+     -e "extensive scan mode where it will collect kernel logs, memory dump, running process at each stage"
+     -n "use a pre-existing snapshot of an emulated virtual devices (disables SDCard creation on startup)"
+     -r "collect data with the SPADE providence system. SPADE must be preinstalled into a snapshot enabled emulated virtual device. REQUIRES -n"
 
-It requires perl to be installed on the machine if it is not installed already. (preferably perl 5 version 12 or higher)
-Along with that, it also uses following modules which may need to be installed if not present.
-Getopt::Std;
-URI::Find;
-URI::Encode
-
-
-Please download Android SDK, install preferable API level and create an Android Virtual Device and provide it's name to Configurator.txt in order to run tests on it.
+Please download Android SDK, install preferable API level and create an Android Virtual Device and provide it's name to Configurator.txt in order to run tests on it. If you are wanting to analyze the malware using the advanced features of SPADE, you will need to download a mini-Audit enabled AVD from http://cgi.cs.indiana.edu/~nhusted/dokuwiki/doku.php?id=projects:androids and follow the instructions on that web site.
 
 If you want to take a route of running a tests on a physical android device, you may skip the above step of creating a virtual device and simply use this Framework as standalone.
 
@@ -36,9 +49,3 @@ Provide all the required details in Configurator.txt file in order for apkeval.p
 Run this framework, logged in as a user which has enough previlages to run tcpdump and all kill processes launched during tests as a session cleanup.
 
 While selecting -d mode to test your android device, please enable 'USB debugging mode' before connecting.
-
-
-
-
-
- 
