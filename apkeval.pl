@@ -7,9 +7,11 @@ use URI::Find;
 use URI::Encode;
 
 
-getopts('ha:p:dse');
+getopts('ha:p:dsen');
 
-our($opt_h, $opt_a, $opt_p, $opt_d, $opt_s, $opt_e);
+our($opt_h, $opt_a, $opt_p, $opt_d, $opt_s, $opt_e, $opt_n);
+
+print($opt_n);
 
 our $SCANDEVICE = ""; # default device (virtual/phone) on which all the scans will run
 our $SCANDRUN = ""; # found scan device to be attached
@@ -57,13 +59,14 @@ our $Tm = ""; # merination time of an app. in other words, the amount of time de
  -d "scan an Android Device you have attached with the machine running ASEF"
  -s "select the scan device to be the device id listed in configurator file"
  -e "extensive scan mode where it will collect kernel logs, memory dump, running process at each stage"
+ -n "use a pre-existing snapshot of an emulated virtual devices (disables SDCard creation on startup)"
 
 EOF
  exit;
  }
 
 if ($opt_h) { &help; }
-if ((!$opt_h) && (!$opt_a) && (!$opt_p) && (!$opt_d) && (!$opt_s) && (!$opt_e)) { &help; }
+if ((!$opt_h) && (!$opt_a) && (!$opt_p) && (!$opt_d) && (!$opt_s) && (!$opt_e) && (!$opt_n)) { &help; }
 
 
 # A S E F - Phase 1 : Passive
@@ -604,9 +607,17 @@ foreach (@ALLFILES)
 
    print "\n\n Going to launch default AVD :- $dAVD \n\n";
 
-   $CMD4AVDLAUNCH = "emulator -avd $dAVD -partition-size 1024";
+   # We're starting without a pre-created snapshot so set the partition size
+  if(!$opt_n) {
+    $CMD4AVDLAUNCH = "emulator -avd $dAVD -partition-size 1024";
+    print "\n Starting the emulator for AVD $dAVD with 1GB Internal Storage & 1 GB SD Card :-  \n\n";
+  }
+  else {
+    $CMD4AVDLAUNCH = "emulator -avd $dAVD";
+    print "\n Starting the emulator for AVD $dAVD with pre-created, default, snapshot:-  \n\n";
+  }
 
-   print "\n Starting the emulator for AVD $dAVD with 1GB Internal Storage & 1 GB SD Card :-  \n\n";
+
 
    my $PID4AVDLAUNCH = fork();
    if (defined($PID4AVDLAUNCH) && $PID4AVDLAUNCH==0)
@@ -675,7 +686,8 @@ foreach (@ALLFILES)
   if($PID4BL)
   {
   
-   while(!`cat bootlog.txt |grep "PowerManagerService.*bootCompleted"`)
+    #while(!`cat bootlog.txt |grep "PowerManagerService.*bootCompleted"`)
+    while(!`cat bootlog.txt |grep "SurfaceFlinger.*Boot is finished"`)
    { 
     sleep(1); 
     print "."; 
