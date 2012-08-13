@@ -723,8 +723,10 @@ foreach (@ALLFILES)
 
   }
 
-  # NATENOTE: HERE IS PROBABLY WHERE WE WANT TO START SPADE
   if($opt_r) {
+    # Startup the SPADE kernel by manually running the dalvikvm on the
+    # android-spade jar file.
+    `adb -s $SCANDEVICE shell cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.core.Kernel"`;
   }
 
 
@@ -880,10 +882,14 @@ if ($opt_s)
    `killall -v tcpdump` ; #user can also run 'cat sudo_password |killall -v tcpdump' if the logged in user doesn't have enough previlages, however this technique inside the script is not recommended for many reasons
 
     if($opt_r) {
-    # NATENOTE: Shutdown SPADE
+    # Shutdown SPADE
+    `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.client.AndroidShutdown"`;
 
-    # NATENOTE: Pull dot file off from AVD with name the same as the current malware.
-    # NATENOTE: Delete dot file on the device
+    # Pull dot file off from AVD with name the same as the current malware.
+    `adb -s $SCANDEVICE pull /sdcard/spade/output/graph.dot $APKRESULTPATH/graph.dot`;
+
+    # Delete dot file on the device
+    `adb -s $SCANDEVICE shell rm /sdcard/spade/output/graph.dot`;
     }
   }
 
