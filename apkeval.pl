@@ -604,7 +604,7 @@ foreach (@ALLFILES)
 
    print "\n\n Going to launch default AVD :- $dAVD \n\n";
 
-   $CMD4AVDLAUNCH = "../tools/./emulator -avd $dAVD -partition-size 1024";
+   $CMD4AVDLAUNCH = "emulator -avd $dAVD -partition-size 1024";
 
    print "\n Starting the emulator for AVD $dAVD with 1GB Internal Storage & 1 GB SD Card :-  \n\n";
 
