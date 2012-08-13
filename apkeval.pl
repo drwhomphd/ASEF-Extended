@@ -820,7 +820,7 @@ if ($opt_s)
 
    print "\n\n Installing $_ now :- \n";
  
-   system("adb -s $SCANDEVICE install -s $APKFULLPATH");
+   system("adb -s $SCANDEVICE install $APKFULLPATH");
 
    sleep($Tm);
 
