@@ -450,7 +450,7 @@ if($opt_p)
 
    $FULLPATH = $SETPATHAPK . "\"" . $apk . "\"";
 
-   @AAPTDUMP = `./aapt dump badging $FULLPATH`;
+   @AAPTDUMP = `aapt dump badging $FULLPATH`;
   
    foreach $DUMP (@AAPTDUMP)
    {
