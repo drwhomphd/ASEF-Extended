@@ -165,10 +165,10 @@ if ((!$opt_h) && (!$opt_a) && (!$opt_p) && (!$opt_d) && (!$opt_s) && (!$opt_e)) 
  {
 
 #  print "\n Killing adb server.......... \n";
-  `./adb kill-server`;
+  `adb kill-server`;
 
 #  print "\n Starting adb server.......... \n";
-  @ADBSER = `./adb start-server`;
+  @ADBSER = `adb start-server`;
 
   if (!@ADBSER) { &adbrefresh(); } # this is a recursive function because at times adb server fails to start and in that case this will take care of it until it successfully starts...
  
@@ -203,7 +203,7 @@ if ((!$opt_h) && (!$opt_a) && (!$opt_p) && (!$opt_d) && (!$opt_s) && (!$opt_e)) 
 
   print "\n ASEF ==> Device Scanner is scanning for attached Android Device........... \n";
 
-  @ARRDEVICES = `./adb devices`;
+  @ARRDEVICES = `adb devices`;
 
 #  print @ARRDEVICES;
 
@@ -254,7 +254,7 @@ if ((!$opt_h) && (!$opt_a) && (!$opt_p) && (!$opt_d) && (!$opt_s) && (!$opt_e)) 
 
   `mkdir $EXTRCTAPK`;
 
-  @ARRPKGLIST = `./adb -s $DEVICEID shell pm list packages`;
+  @ARRPKGLIST = `adb -s $DEVICEID shell pm list packages`;
 
 #  print @ARRPKGLIST; 
 
@@ -271,7 +271,7 @@ if ((!$opt_h) && (!$opt_a) && (!$opt_p) && (!$opt_d) && (!$opt_s) && (!$opt_e)) 
 
    #print $_;
 
-   $APKPATH = `./adb -s $DEVICEID shell pm path $_`;
+   $APKPATH = `adb -s $DEVICEID shell pm path $_`;
 
    if ($APKPATH !~ m/package\:\/system/)
 
@@ -290,7 +290,7 @@ if ((!$opt_h) && (!$opt_a) && (!$opt_p) && (!$opt_d) && (!$opt_s) && (!$opt_e)) 
  
      print " ......Extracting apk file to the local directory :- ";
 
-     `./adb -s $DEVICEID pull $BKAPKPATH $EXTRCTAPK`;
+     `adb -s $DEVICEID pull $BKAPKPATH $EXTRCTAPK`;
    }
       
   } 
@@ -583,7 +583,7 @@ foreach (@ALLFILES)
  sub avdlauncher()
  {
 
-  @ARRDEVICES = `./adb devices`;
+  @ARRDEVICES = `adb devices`;
 
   print @ARRDEVICES;
 
@@ -625,9 +625,9 @@ foreach (@ALLFILES)
   while(!$SCANDEVICE)
   {
 
-   @ARRDEVICES = `./adb devices`;
+   @ARRDEVICES = `adb devices`;
 
-   my $FOUNDEMU = `./adb devices |grep emulator`;
+   my $FOUNDEMU = `adb devices |grep emulator`;
 
    chomp $FOUNDEMU;
 
@@ -698,7 +698,7 @@ foreach (@ALLFILES)
      sleep(1); 
    }
 
-   `./adb -s $SCANDEVICE shell input keyevent 82`;
+   `adb -s $SCANDEVICE shell input keyevent 82`;
 
    print "\n AVD unlocked !\n";
 
@@ -722,7 +722,7 @@ if (!$opt_s)
 
 if ($opt_s)
 {
- @ARRDEVICES = `./adb devices`;
+ @ARRDEVICES = `adb devices`;
  
  foreach(@ARRDEVICES)
  {
@@ -790,7 +790,7 @@ if ($opt_s)
 
    print "\n Going to flush adb messages from the device $SCANDEVICE ...... ";
    
-   `./adb -s $SCANDEVICE logcat -c`; # this will flush all the adb log message history from the device. not performing this step can cause False Postives and overlaps on various app results. If the message history is suppose to be preserved, in that case this can be replaced by another technique where it will collect all the adb log data without flushing it and later chop it based on time stamps.
+   `adb -s $SCANDEVICE logcat -c`; # this will flush all the adb log message history from the device. not performing this step can cause False Postives and overlaps on various app results. If the message history is suppose to be preserved, in that case this can be replaced by another technique where it will collect all the adb log data without flushing it and later chop it based on time stamps.
 
    sleep(1);
 
@@ -820,7 +820,7 @@ if ($opt_s)
 
    print "\n\n Installing $_ now :- \n";
  
-   system("./adb -s $SCANDEVICE install -s $APKFULLPATH");
+   system("adb -s $SCANDEVICE install -s $APKFULLPATH");
 
    sleep($Tm);
 
@@ -828,7 +828,7 @@ if ($opt_s)
  
    print " \n Going to launch $_ using the launcher activity $LAUNCHAPK \n";
 
-   system("./adb -s $SCANDEVICE shell am start -n $LAUNCHAPK");
+   system("adb -s $SCANDEVICE shell am start -n $LAUNCHAPK");
 
    sleep($Tm);
 
@@ -836,13 +836,13 @@ if ($opt_s)
 
    print "\n Sending random gestures ... \n";
 
-   system("./adb -s $SCANDEVICE shell monkey -p $PACKAGENAME $RGC");
+   system("adb -s $SCANDEVICE shell monkey -p $PACKAGENAME $RGC");
 
    sleep($Tm);
 
    print "\n Done testing... uninstalling now .... \n";
 
-   system("./adb -s $SCANDEVICE uninstall $PACKAGENAME");
+   system("adb -s $SCANDEVICE uninstall $PACKAGENAME");
   
    sleep(1);
  
@@ -1224,7 +1224,7 @@ foreach (@APKFILES)
 
  print "\n\n Installing $_ now :- \n";
  
- system("./adb install -s $APKFULLPATH");
+ system("adb install -s $APKFULLPATH");
 
 
  my $PID4APKKERNLOGAI = "";
