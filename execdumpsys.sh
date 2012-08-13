@@ -1,5 +1,5 @@
 #!/bin/bash
 
-./adb shell dumpsys >"$@" &
+adb shell dumpsys >"$@" &
 PID=$!
 echo $PID

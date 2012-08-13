@@ -1,5 +1,5 @@
 #!/bin/bash
 
-./adb shell ps >"$@" &
+adb shell ps >"$@" &
 PID=$!
 echo $PID
