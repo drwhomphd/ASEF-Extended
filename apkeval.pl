@@ -753,7 +753,7 @@ sub avdlauncher()
     # android-spade jar file.
     print "\n Starting SPADE. \n";
 
-    `adb -s $SCANDEVICE shell cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.core.Kernel"`;
+    `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.core.Kernel &"`;
   }
 
 
