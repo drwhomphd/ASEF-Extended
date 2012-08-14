@@ -635,7 +635,7 @@ sub avdlauncher()
       print "\n Starting the emulator for AVD $dAVD with 1GB Internal Storage & 1 GB SD Card :-  \n\n";
     }
     else {
-      $CMD4AVDLAUNCH = "emulator -avd $dAVD";
+      $CMD4AVDLAUNCH = "emulator -avd $dAVD -no-snapshot-save";
       print "\n Starting the emulator for AVD $dAVD with pre-created, default, snapshot:-  \n\n";
     }
 
@@ -753,6 +753,8 @@ sub avdlauncher()
   if($opt_r) {
     # Startup the SPADE kernel by manually running the dalvikvm on the
     # android-spade jar file.
+    print "\n Starting SPADE. \n";
+
     `adb -s $SCANDEVICE shell cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.core.Kernel"`;
   }
 
@@ -910,8 +912,11 @@ sub avdtestcycle()
 
     if($opt_r) {
       # Shutdown SPADE
+      
+      print "\n Shutting down SPADE \n";
       `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.client.AndroidShutdown"`;
 
+      print "\n Saving SPADE grpah data to $APKRESULTPATH/graph.dot \n";
       # Pull dot file off from AVD with name the same as the current malware.
       `adb -s $SCANDEVICE pull /sdcard/spade/output/graph.dot $APKRESULTPATH/graph.dot`;
 
