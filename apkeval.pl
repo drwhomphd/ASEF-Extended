@@ -26,8 +26,6 @@ getopts('ha:p:dsenr');
 
 our($opt_h, $opt_a, $opt_p, $opt_d, $opt_s, $opt_e, $opt_n, $opt_r);
 
-print($opt_n);
-
 our $SCANDEVICE = ""; # default device (virtual/phone) on which all the scans will run
 our $SCANDRUN = ""; # found scan device to be attached
 our $dAVD = ""; # default 'android virtual device' on which the scans will run if no scandevice attached
