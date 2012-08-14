@@ -1,3 +1,6 @@
+#!/usr/bin/perl 
+#phoenix
+
 # Copyright 2013 Parth Patel (Original Author)
 # Copyright 2013 Nathaniel "DrWhom" Husted (Extended)
 #
@@ -12,10 +15,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
-#!/usr/bin/perl 
-#phoenix
 
 use strict;
 use Getopt::Std;
@@ -63,9 +62,9 @@ our $Tm = ""; # merination time of an app. in other words, the amount of time de
 
 # Help function will be called if no arguments were given or if -h was provided as an arguemnt
 
- sub help()
- {
-      print <<EOF;
+sub help()
+{
+  print <<EOF;
 
  " Welcome to ApkEval ! "
 
@@ -79,8 +78,8 @@ our $Tm = ""; # merination time of an app. in other words, the amount of time de
  -r "collect data with the SPADE providence system. SPADE must be preinstalled into a snapshot enabled emulated virtual device. REQUIRES -n"
 
 EOF
- exit;
- }
+  exit;
+}
 
 if ($opt_h) { &help; }
 
@@ -99,96 +98,96 @@ if ((!$opt_h) && (!$opt_a) && (!$opt_p) && (!$opt_d) && (!$opt_s) && (!$opt_e) &
 # Initialization mode - Configurator module 
 # Configurator function will take all the necessary parameters to configure this tool and will store is in configurator.txt file. once this file is properly configured, it won't prompt for these parameters.
 
- sub configurator()
- {
+sub configurator()
+{
 
   print "\n\n\n\n ASEF ==> Running a configurator for ASEF ............. \n";
- 
+
   open(FCONFIG, "configurator.txt") or die "Can't open configurator.txt file \n";
 
   while(<FCONFIG>)
   { 
     if($_ =~ m/(^Default AVD \=\s*)(.*)/) 
     {
-     our $dAVD = $2; 
+      our $dAVD = $2; 
 
-     chomp $dAVD; 
+      chomp $dAVD; 
 
-     print "\n Using default AVD = $dAVD \n"; 
+      print "\n Using default AVD = $dAVD \n"; 
     }
 
     if($_ =~ m/(^Google Safe Browsing API \=\s*)(.*)/) 
     {
-     our $GAPI = $2; 
- 
-     chomp $GAPI; 
+      our $GAPI = $2; 
 
-     print "\n Using Google Safe Browsing API key = $GAPI \n"; 
+      chomp $GAPI; 
+
+      print "\n Using Google Safe Browsing API key = $GAPI \n"; 
     }
 
     if($_ =~ m/(^Host IP \=\s*)(.*)/)
     {
-     our $HOSTIP = $2;
+      our $HOSTIP = $2;
 
-     chomp $HOSTIP;
+      chomp $HOSTIP;
     }
 
     if($_ =~ m/(^interface \=\s*)(.*)/)
     {
-     our $IFACE = $2;
+      our $IFACE = $2;
 
-     chomp $IFACE;
+      chomp $IFACE;
 
-     print "\n Using packet capturing tool 'tcpdump' on $HOSTIP at interface $IFACE \n";
+      print "\n Using packet capturing tool 'tcpdump' on $HOSTIP at interface $IFACE \n";
     }
-  
+
     if($_ =~ m/(^AD \=\s*)(.*)/)
     {
-     if ($opt_s) 
-     {
-      our $SCANDEVICE = $2;
-    
-      chomp $SCANDEVICE;
-     
-      print "\n Found an android scan device listed in the configurator file :- $SCANDEVICE \n";
-     }
+      if ($opt_s) 
+      {
+        our $SCANDEVICE = $2;
+
+        chomp $SCANDEVICE;
+
+        print "\n Found an android scan device listed in the configurator file :- $SCANDEVICE \n";
+      }
     } 
 
     if($_ =~ m/(^RGC \=\s*)(.*)/)
     {
-     our $RGC = $2;
+      our $RGC = $2;
 
-     chomp $RGC;
+      chomp $RGC;
 
-     if ($RGC == "") { $RGC = 55; } # if no of gestures are not give, it's default value will be taken which is 55
+      if ($RGC == "") { $RGC = 55; } # if no of gestures are not give, it's default value will be taken which is 55
 
-     print "\n Will send $RGC number of gestures to each app inside the activity mode of a test cycle \n";
+      print "\n Will send $RGC number of gestures to each app inside the activity mode of a test cycle \n";
     }
 
     if($_ =~ m/(^Tm \=\s*)(.*)/)
     {
-     our $Tm = $2;
+      our $Tm = $2;
 
-     chomp $Tm;
+      chomp $Tm;
 
-     if ($Tm == "") { $Tm = 5; } # if test cycle time duration is not tuned through Tm, it's default value will be taken which is 60 seconds 
+      if ($Tm == "") { $Tm = 5; } # if test cycle time duration is not tuned through Tm, it's default value will be taken which is 60 seconds 
 
-     print "\n Tm is set to be $Tm seconds \n";
+      print "\n Tm is set to be $Tm seconds \n";
     }
 
   }
 
- }
+}
 
- &configurator;
+&configurator;
 
 
 # Initialization mode : adb refresh 
 # adb refresh is a recursive function which will start adb server and assure it have lauched successfully
 
- sub adbrefresh()
+sub adbrefresh()
 
- {
+{
 
 #  print "\n Killing adb server.......... \n";
   `adb kill-server`;
@@ -197,30 +196,30 @@ if ((!$opt_h) && (!$opt_a) && (!$opt_p) && (!$opt_d) && (!$opt_s) && (!$opt_e) &
   @ADBSER = `adb start-server`;
 
   if (!@ADBSER) { &adbrefresh(); } # this is a recursive function because at times adb server fails to start and in that case this will take care of it until it successfully starts...
- 
+
 #  print @ADBSER;
 
- }
+}
 
 # Initialization mode : Device Detect 
 # devicescanner function will be called if -d option was provided as an argument. It will scan the attached device and report it to $DEVICEID. In case if no device was found, it will exit the program and will ask user to attach a device to the machine. Also the device should have the 'USB Debugging Mode' enabled before connecting to the machine running A S E F.
 
- sub devicescanner()
+sub devicescanner()
 
- {
+{
 
-   print "\n Starting the adb server........ \n\n";
+  print "\n Starting the adb server........ \n\n";
 
-   &adbrefresh(); 
+  &adbrefresh(); 
 
 #  print @ADBSER;
- 
+
   foreach (@ADBSER) 
   {
-   if ($_ =~ m/(\* daemon not running. starting it now on port )(\d+)(\s\*)/) 
+    if ($_ =~ m/(\* daemon not running. starting it now on port )(\d+)(\s\*)/) 
     { $ADBPORT = $2; } 
 
-   if ($_ =~ m/daemon started successfully/)
+    if ($_ =~ m/daemon started successfully/)
     { print "\n adb server started successfully on port :- $ADBPORT\n"; }
   }
 
@@ -234,46 +233,46 @@ if ((!$opt_h) && (!$opt_a) && (!$opt_p) && (!$opt_d) && (!$opt_s) && (!$opt_e) &
 #  print @ARRDEVICES;
 
   my $TMPCK = 0;
-   
+
   foreach(@ARRDEVICES)
   {
 
     if ($_ =~ m/List of devices attached/)
     {  
-     $TMPCK++;
+      $TMPCK++;
     }
 
     if ($TMPCK == 1 )
     {
-     if ($_ !~ m/device/ && $_ !~ m/emulator/)  
-       {
-         print "\n No devices found...\n Please attach an android device and run this tool again........ please enable \"USB debugging mode\" in Android Device to be detected \n";
-         exit;
-       }
+      if ($_ !~ m/device/ && $_ !~ m/emulator/)  
+      {
+        print "\n No devices found...\n Please attach an android device and run this tool again........ please enable \"USB debugging mode\" in Android Device to be detected \n";
+        exit;
+      }
     }
 
     if ($_ =~ m/(.*?)(\s*device)/ )
     { 
       if ($1 !~ m/List/ && $1 !~ m/emulator/ && $1 !~ m/$SCANDEVICE/) 
-       { 
+      { 
         print "\n Found a connected device :- $1 \n\n\n"; 
         $DEVICEID = $1; 
         $TMPCK = 0;
-       }
+      }
 
     }
   }
-   
- }
+
+}
 
 
 # Normalization mode : Extractor module
 # extractor will extract all the .apk files from the attached android device and will store it on a local directory named EXTRACTOR_TIMESTAMP
 
- sub extractor()
+sub extractor()
 
- {
- 
+{
+
   print "\n ASEF ==> Extractor is running on..... Device ID :- $DEVICEID ...........\n\n"; 
 
   print "\n Extracting all the files to the local directory :- $EXTRCTAPK \n";
@@ -287,84 +286,84 @@ if ((!$opt_h) && (!$opt_a) && (!$opt_p) && (!$opt_d) && (!$opt_s) && (!$opt_e) &
   my $APKPATH = "";
   my $APKCNT = 0;
   my $BKAPKPATH = "";
- 
+
   foreach (@ARRPKGLIST)
   {
 
-   if ($APKCNT == 5) { last; } # if you have 50+ applications installed, you can just use this counter to only do it for 5 if you are only interested in it'd demo...
-   
-   $_ =~ s/package\://g;
+    if ($APKCNT == 5) { last; } # if you have 50+ applications installed, you can just use this counter to only do it for 5 if you are only interested in it'd demo...
 
-   #print $_;
+    $_ =~ s/package\://g;
 
-   $APKPATH = `adb -s $DEVICEID shell pm path $_`;
+    #print $_;
 
-   if ($APKPATH !~ m/package\:\/system/)
+    $APKPATH = `adb -s $DEVICEID shell pm path $_`;
 
-   { 
-     chomp ($APKPATH);
+    if ($APKPATH !~ m/package\:\/system/)
 
-     $BKAPKPATH = $APKPATH;
-    
-     $BKAPKPATH =~ s/package\://g; 
-  
-     $APKCNT++;
+    { 
+      chomp ($APKPATH);
 
-     $APKPATH =~ s/package\:\/.*\///g;
+      $BKAPKPATH = $APKPATH;
 
-     print "\n Found apk file $APKCNT :- $APKPATH \n";
- 
-     print " ......Extracting apk file to the local directory :- ";
+      $BKAPKPATH =~ s/package\://g; 
 
-     `adb -s $DEVICEID pull $BKAPKPATH $EXTRCTAPK`;
-   }
-      
+      $APKCNT++;
+
+      $APKPATH =~ s/package\:\/.*\///g;
+
+      print "\n Found apk file $APKCNT :- $APKPATH \n";
+
+      print " ......Extracting apk file to the local directory :- ";
+
+      `adb -s $DEVICEID pull $BKAPKPATH $EXTRCTAPK`;
+    }
+
   } 
- 
+
   print "\n Total number of Applications extracted :- $APKCNT \n\n";
 
- }
+}
 
 
 if($opt_d)
 {
- &devicescanner;
+  &devicescanner;
 
- &extractor;
+  &extractor;
 
- if($EXTRCTAPK !~ m/.*\/$/)
- {
-  $PATHJOIN = "/";
- }
- 
- $SETPATHAPK = $EXTRCTAPK . $PATHJOIN ;
-
- opendir (EDIR, $EXTRCTAPK);
-
- my @ALLTMPFILES = "";
-
- @ALLTMPFILES = readdir(EDIR);
-
- my $COUNT = 0;
-
- foreach (@ALLTMPFILES)
- {
-  if ($_ =~ m/.*\.apk$/)
+  if($EXTRCTAPK !~ m/.*\/$/)
   {
-    $ALLFILES[$COUNT] = $_ ;
-
-    $COUNT++;
-
-    print "\n";
-
-    print $COUNT.") ";
-
-    print $_;
-
+    $PATHJOIN = "/";
   }
- }
 
- closedir EDIR;
+  $SETPATHAPK = $EXTRCTAPK . $PATHJOIN ;
+
+  opendir (EDIR, $EXTRCTAPK);
+
+  my @ALLTMPFILES = "";
+
+  @ALLTMPFILES = readdir(EDIR);
+
+  my $COUNT = 0;
+
+  foreach (@ALLTMPFILES)
+  {
+    if ($_ =~ m/.*\.apk$/)
+    {
+      $ALLFILES[$COUNT] = $_ ;
+
+      $COUNT++;
+
+      print "\n";
+
+      print $COUNT.") ";
+
+      print $_;
+
+    }
+  }
+
+  closedir EDIR;
 
 # print @ALLFILES;
 
@@ -373,32 +372,32 @@ if($opt_d)
 if($opt_a)
 {
 
- chomp $opt_a;
+  chomp $opt_a;
 
 # print $opt_a;
 
- if($opt_a =~ m/(\/.*\/)(.*\.apk)/)
- {
-  $SETPATHAPK = $1;
+  if($opt_a =~ m/(\/.*\/)(.*\.apk)/)
+  {
+    $SETPATHAPK = $1;
 
-  @ALLFILES = $2;
- }
- 
- if($opt_a =~ m/.*\.apk/ && $opt_a !~ m/\//g)
- {
-  $SETPATHAPK = $PWD;
+    @ALLFILES = $2;
+  }
 
-  @ALLFILES = $opt_a;
- }
-  
- if($opt_a !~ m/.*\.apk$/)
- {
-  print "\n Please only give .apk files to scan...... \n";
- 
-  exit;
- }
+  if($opt_a =~ m/.*\.apk/ && $opt_a !~ m/\//g)
+  {
+    $SETPATHAPK = $PWD;
 
- print "\n Application to scan :- @ALLFILES \n\n";
+    @ALLFILES = $opt_a;
+  }
+
+  if($opt_a !~ m/.*\.apk$/)
+  {
+    print "\n Please only give .apk files to scan...... \n";
+
+    exit;
+  }
+
+  print "\n Application to scan :- @ALLFILES \n\n";
 
 }
 
@@ -406,45 +405,45 @@ if($opt_a)
 if($opt_p)
 {
 
- my @ALLTMPFILES = "";
+  my @ALLTMPFILES = "";
 
- chomp $opt_p;
+  chomp $opt_p;
 
- if($opt_p !~ m/.*\/$/)
- {
-  $PATHJOIN = "/";
- }
-
- $SETPATHAPK = $opt_p . $PATHJOIN ;
-
- print "\n\n Location of the Directory :- $opt_p \n\n";
-
- opendir (PDIR, $opt_p);
-
- @ALLTMPFILES = readdir(PDIR);
-
- my $COUNT = 0;
-
- foreach (@ALLTMPFILES)
- {
-  if ($_ =~ m/.*\.apk$/)
-  { 
-    $ALLFILES[$COUNT] = $_ ;
-
-    $COUNT++;
-
-    print "\n";
-
-    print $COUNT.") ";
-
-    print $_;
-
+  if($opt_p !~ m/.*\/$/)
+  {
+    $PATHJOIN = "/";
   }
- }
+
+  $SETPATHAPK = $opt_p . $PATHJOIN ;
+
+  print "\n\n Location of the Directory :- $opt_p \n\n";
+
+  opendir (PDIR, $opt_p);
+
+  @ALLTMPFILES = readdir(PDIR);
+
+  my $COUNT = 0;
+
+  foreach (@ALLTMPFILES)
+  {
+    if ($_ =~ m/.*\.apk$/)
+    { 
+      $ALLFILES[$COUNT] = $_ ;
+
+      $COUNT++;
+
+      print "\n";
+
+      print $COUNT.") ";
+
+      print $_;
+
+    }
+  }
 
 # print @ALLFILES;
 
- print "\n\n Total number of apk files found = $COUNT\n\n";
+  print "\n\n Total number of apk files found = $COUNT\n\n";
 
 }     
 
@@ -452,8 +451,8 @@ if($opt_p)
 # Organization mode : converter module
 # converter module converts the matadata associated with .apk files and populates the hash table where they are better organized. It increases the accessebility of the information associated with applications.
 
- sub converter()
- {
+sub converter()
+{
 
   print "\n Inside converter module \n\n";
 
@@ -468,38 +467,38 @@ if($opt_p)
   my $VERCODE = "";
   my $VERNAME = "";
   my $APPLABLE = "";
- 
+
   foreach $apk (@ALLFILES)
   {
 
-   print "\n Print local path for $apk :- $SETPATHAPK \n"; 
+    print "\n Print local path for $apk :- $SETPATHAPK \n"; 
 
-   $FULLPATH = $SETPATHAPK . "\"" . $apk . "\"";
+    $FULLPATH = $SETPATHAPK . "\"" . $apk . "\"";
 
-   @AAPTDUMP = `aapt dump badging $FULLPATH`;
-  
-   foreach $DUMP (@AAPTDUMP)
-   {
-    if($DUMP =~ m/(^package\: name\=)('.*?')( versionCode\=)(.*?)( versionName\=)(.*)/)
+    @AAPTDUMP = `aapt dump badging $FULLPATH`;
+
+    foreach $DUMP (@AAPTDUMP)
     {
-     $PKGNM = $2;
-     $VERCODE = $4;
-     $VERNAME = $6;
-    } 
+      if($DUMP =~ m/(^package\: name\=)('.*?')( versionCode\=)(.*?)( versionName\=)(.*)/)
+      {
+        $PKGNM = $2;
+        $VERCODE = $4;
+        $VERNAME = $6;
+      } 
 
-    if($DUMP =~ m/(^launchable\-activity\: name\=)('.*?')(\s*.*)/)
-    {
-     $LAUNCHACT = $2;
+      if($DUMP =~ m/(^launchable\-activity\: name\=)('.*?')(\s*.*)/)
+      {
+        $LAUNCHACT = $2;
+      }
+
+      if($DUMP =~ m/(^application\-label\:)('.*')/)
+      {
+        $APPLABLE = $2;
+      }
+
     }
 
-    if($DUMP =~ m/(^application\-label\:)('.*')/)
-    {
-     $APPLABLE = $2;
-    }
-
-   }
-
-   %HAPK->{$apk} = ( { pkgnm => $PKGNM , launchact => $LAUNCHACT , vercode => $VERCODE , vername => $VERNAME , applable => $APPLABLE , adbstart => "" , adbstop => ""}, );
+    %HAPK->{$apk} = ( { pkgnm => $PKGNM , launchact => $LAUNCHACT , vercode => $VERCODE , vername => $VERNAME , applable => $APPLABLE , adbstart => "" , adbstop => ""}, );
 
   }
 
@@ -507,45 +506,45 @@ if($opt_p)
   foreach $apk ( keys %HAPK )
   {
 
-   if($apk !~ m/.*\.apk/)
-   { next ;}
+    if($apk !~ m/.*\.apk/)
+    { next ;}
 
-   sleep(1);
+    sleep(1);
 
-   print "\n\n application name :- $apk";
+    print "\n\n application name :- $apk";
 
-   print "\n packagename :- ";
-   print $HAPK{$apk} -> {pkgnm} ;
+    print "\n packagename :- ";
+    print $HAPK{$apk} -> {pkgnm} ;
 
-   print "\n launcher activity :- ";
-   print $HAPK{$apk} -> {launchact} ;
+    print "\n launcher activity :- ";
+    print $HAPK{$apk} -> {launchact} ;
 
-   print "\n version code :- ";
-   print $HAPK{$apk} -> {vercode} ;
+    print "\n version code :- ";
+    print $HAPK{$apk} -> {vercode} ;
 
-   print "\n version name :- ";
-   print $HAPK{$apk} -> {vername} ;
+    print "\n version name :- ";
+    print $HAPK{$apk} -> {vername} ;
 
-   print "\n app lable :- ";
-   print $HAPK{$apk} -> {applable} ;
+    print "\n app lable :- ";
+    print $HAPK{$apk} -> {applable} ;
 
   }
 
- }
+}
 
 if(@ALLFILES)
 {
- print "\n Calling a converter module :- \n";
+  print "\n Calling a converter module :- \n";
 
- &converter();
+  &converter();
 
 }
 
 else
 {
- print "\n No APK files to work on \n";
+  print "\n No APK files to work on \n";
 
- exit;
+  exit;
 
 }
 
@@ -553,49 +552,49 @@ else
 # Organizer mode : Test Hierarchy module 
 # organizer will create a TEST DIRECTORY with a TIME STAMP in it's name. It will also create the sub-directory hierarchy for each application in order to store the results associated with each application
 
- sub organizer()
- {
+sub organizer()
+{
 
   sleep(1);
 
   print "\nInside Organizer \n";
 
 #  print @_;
- 
+
   print "\n\n ---- Creating the master TEST RESULT DIRECTORY :- $TESTDIR ----\n\n";
 
   `mkdir $TESTDIR`;
- 
+
   my $TMPAPKFILE = "";
   my $APKTESTDIR = "";
   my $i = 0;
 
-foreach (@ALLFILES)
-{
+  foreach (@ALLFILES)
+  {
 
- $i++;
- 
- $TMPAPKFILE = "\"" . $_ . "\"";
- 
- my $APKTESTDIR = $TESTDIR ."/" . $TMPAPKFILE ;
+    $i++;
 
- sleep(1); 
- print "\n$i) $APKTESTDIR";
- 
- `mkdir $APKTESTDIR`;
- 
+    $TMPAPKFILE = "\"" . $_ . "\"";
+
+    my $APKTESTDIR = $TESTDIR ."/" . $TMPAPKFILE ;
+
+    sleep(1); 
+    print "\n$i) $APKTESTDIR";
+
+    `mkdir $APKTESTDIR`;
+
+
+  }
+
+
 
 }
-  
 
+print "\n\n Calling Organizer module to organize test results \n\n";
 
- }
+&organizer();
 
- print "\n\n Calling Organizer module to organize test results \n\n";
-
- &organizer();
-
- print "\n Done creating the Test result hierarchy ....... \n\n";
+print "\n Done creating the Test result hierarchy ....... \n\n";
 
 
 
@@ -603,11 +602,11 @@ foreach (@ALLFILES)
 # Launch mode : virtual device launcher module
 # avdlauncher will be called to check if the default device (virtual/phone) is running. If it's found running, it will proceed with the test cycle. If it's not found running then it will be launched.
 
- my $CMD4AVDLAUNCH = "";
- my $PID4AVDLAUNCH = "";
+my $CMD4AVDLAUNCH = "";
+my $PID4AVDLAUNCH = "";
 
- sub avdlauncher()
- {
+sub avdlauncher()
+{
 
   @ARRDEVICES = `adb devices`;
 
@@ -615,127 +614,139 @@ foreach (@ALLFILES)
 
   foreach (@ARRDEVICES)
   {
-   if($_ =~ m/(emulator.*?)(\s*device)/)
-   {
-    print "\n\n Found default AVD to be running......... \n\n";
+    if($_ =~ m/(emulator.*?)(\s*device)/)
+    {
+      print "\n\n Found default AVD to be running......... \n\n";
 
-    $SCANDEVICE = $1;
+      $SCANDEVICE = $1;
 
-    print $SCANDEVICE;
-   }
+      print $SCANDEVICE;
+    }
   }
 
   if(!$SCANDEVICE)
   {
 
-   print "\n\n Going to launch default AVD :- $dAVD \n\n";
+    print "\n\n Going to launch default AVD :- $dAVD \n\n";
 
-   # We're starting without a pre-created snapshot so set the partition size
-  if(!$opt_n) {
-    $CMD4AVDLAUNCH = "emulator -avd $dAVD -partition-size 1024";
-    print "\n Starting the emulator for AVD $dAVD with 1GB Internal Storage & 1 GB SD Card :-  \n\n";
-  }
-  else {
-    $CMD4AVDLAUNCH = "emulator -avd $dAVD";
-    print "\n Starting the emulator for AVD $dAVD with pre-created, default, snapshot:-  \n\n";
-  }
+    # We're starting without a pre-created snapshot so set the partition size
+    if(!$opt_n) {
+      $CMD4AVDLAUNCH = "emulator -avd $dAVD -partition-size 1024";
+      print "\n Starting the emulator for AVD $dAVD with 1GB Internal Storage & 1 GB SD Card :-  \n\n";
+    }
+    else {
+      $CMD4AVDLAUNCH = "emulator -avd $dAVD";
+      print "\n Starting the emulator for AVD $dAVD with pre-created, default, snapshot:-  \n\n";
+    }
 
 
 
-   my $PID4AVDLAUNCH = fork();
-   if (defined($PID4AVDLAUNCH) && $PID4AVDLAUNCH==0)
-   {
-    # running AVD in background process
-    exec("$CMD4AVDLAUNCH &");
-   }
+    my $PID4AVDLAUNCH = fork();
+    if (defined($PID4AVDLAUNCH) && $PID4AVDLAUNCH==0)
+    {
+      # running AVD in background process
+      exec("$CMD4AVDLAUNCH &");
+    }
 
-   
+
   }
 
   my $FLAG = 0;
   my $FOUNDEMU = "";
   my $PSEMU = "";
-  
+
   while(!$SCANDEVICE)
   {
 
-   @ARRDEVICES = `adb devices`;
+    @ARRDEVICES = `adb devices`;
 
-   my $FOUNDEMU = `adb devices |grep emulator`;
+    my $FOUNDEMU = `adb devices |grep emulator`;
 
-   chomp $FOUNDEMU;
+    chomp $FOUNDEMU;
 
-   my $PSEMU = `ps -a |grep emulator |grep -v grep |awk '{print \$1}'`;
+    my $PSEMU = `ps -a |grep emulator |grep -v grep |awk '{print \$1}'`;
 
-   foreach (@ARRDEVICES)
-   {
+    foreach (@ARRDEVICES)
+    {
 
-    if($_ =~ m/emulator.*offline/ && $FLAG == 0)
-     {
-      print "\n Default AVD $dAVD has been lauched in background... but it is still in 'offline' mode... waiting for $dAVD to come to 'online' state.........";
-      $FLAG = 1;
-     }
-  
-    if($_ =~ m/emulator.*offline/ && $FLAG == 1)
-     {
-      sleep(1);
-      print ".";
-     }
-   
-    if($_ =~ m/(emulator.*?)(\s*device)/)
-     {
-      print "\n\n $dAVD came to life.... and now it's in online mode ..... \n\n";
+      if($_ =~ m/emulator.*offline/ && $FLAG == 0)
+      {
+        print "\n Default AVD $dAVD has been lauched in background... but it is still in 'offline' mode... waiting for $dAVD to come to 'online' state.........";
+        $FLAG = 1;
+      }
 
-      $SCANDEVICE = $1;
+      if($_ =~ m/emulator.*offline/ && $FLAG == 1)
+      {
+        sleep(1);
+        print ".";
+      }
 
-      $PID4BL = `./execadblogcat.sh $SCANDEVICE bootlog.txt`;
+      if($_ =~ m/(emulator.*?)(\s*device)/)
+      {
+        print "\n\n $dAVD came to life.... and now it's in online mode ..... \n\n";
 
-      print "\n Waiting for $dAVD to complete the boot process....";
-     }
+        $SCANDEVICE = $1;
 
-    if($PSEMU && !$FOUNDEMU)
-     {
-      #print "\n ADB server has failed to recognize emulator device...... \n";
+        $PID4BL = `./execadblogcat.sh $SCANDEVICE bootlog.txt`;
 
-      #print "\n Going to run adbrefresh ....... \n";
+        print "\n Waiting for $dAVD to complete the boot process....";
+      }
 
-      &adbrefresh();
-     }
- 
-   }
-  
+      if($PSEMU && !$FOUNDEMU)
+      {
+        #print "\n ADB server has failed to recognize emulator device...... \n";
+
+        #print "\n Going to run adbrefresh ....... \n";
+
+        &adbrefresh();
+      }
+
+    }
+
   }  
 
   if($PID4BL)
   {
-  
-    #while(!`cat bootlog.txt |grep "PowerManagerService.*bootCompleted"`)
-    while(!`cat bootlog.txt |grep "SurfaceFlinger.*Boot is finished"`)
-   { 
-    sleep(1); 
-    print "."; 
-   }
+    if(!$opt_n) {
+      while(!`cat bootlog.txt |grep "SurfaceFlinger.*Boot is finished"`)
+      { 
+        sleep(1); 
+        print "."; 
+      }
+    }
+    else {
+      # When the emulator starts up an image with a snapshot, there is no
+      # guarantee that the bootlog will contain any messages about the
+      # Boot being finished. In this case we just look for the first
+      # actual logcat entry because at this point we know the snapshot 
+      # is up and running.
+      while(!`cat bootlog.txt |grep " [A-Z]/[A-Za-z]*\(.*\): "`)
+      { 
+        sleep(1);
+        print ".";
+      }
+    }
 
-   print "\n\n Boot Completed !!";
+    print "\n\n Boot Completed !!";
 
-   chomp $PID4BL;
+    chomp $PID4BL;
 
-   `./killproc.sh $PID4BL`;
+    `./killproc.sh $PID4BL`;
 
 #   print "\n Invisible swipe coming in 15 seconds............";
- 
-   my $CNT = 0;
-   
-   while($CNT <= 15) 
-   { 
-     $CNT++; 
-     print "."; 
-     sleep(1); 
-   }
 
-   `adb -s $SCANDEVICE shell input keyevent 82`;
+    my $CNT = 0;
 
-   print "\n AVD unlocked !\n";
+    while($CNT <= 15) 
+    { 
+      $CNT++; 
+      print "."; 
+      sleep(1); 
+    }
+
+    `adb -s $SCANDEVICE shell input keyevent 82`;
+
+    print "\n AVD unlocked !\n";
 
   }
 
@@ -754,42 +765,42 @@ foreach (@ALLFILES)
 if (!$opt_s)
 {
 
- print "\n\n Calling AVD LAUNCHER module ...... \n\n";
+  print "\n\n Calling AVD LAUNCHER module ...... \n\n";
 
- &avdlauncher();
+  &avdlauncher();
 }
 
 if ($opt_s)
 {
- @ARRDEVICES = `adb devices`;
- 
- foreach(@ARRDEVICES)
- {
-  if($_ =~ m/$SCANDEVICE\s*device/)
+  @ARRDEVICES = `adb devices`;
+
+  foreach(@ARRDEVICES)
   {
-   print "\n Found the scanning devices $SCANDEVICE to be connected ..... \n";
-  
-   $SCANDRUN = "RUNNING";
+    if($_ =~ m/$SCANDEVICE\s*device/)
+    {
+      print "\n Found the scanning devices $SCANDEVICE to be connected ..... \n";
+
+      $SCANDRUN = "RUNNING";
+    }
   }
- }
 
- if (!$SCANDRUN)
- {
-  print "\n scanning device not found / couldn't detect ... going to exit now... please reconnect the scanning device and start the tool again... \n";
+  if (!$SCANDRUN)
+  {
+    print "\n scanning device not found / couldn't detect ... going to exit now... please reconnect the scanning device and start the tool again... \n";
 
-  exit;
- }
+    exit;
+  }
 
 }
 
 
 # Test Cycle : test cycle module
 
- sub avdtestcycle()
- {
+sub avdtestcycle()
+{
 
   print "\n Inside AVD test cycle module ..... \n";
-  
+
   my $APKFULLPATH = "";
   my $APKRESULTPATH = "";
   my $ADBLOG4APK = "";
@@ -819,99 +830,99 @@ if ($opt_s)
   {
 
 # Use this $TESTROUND if you want to just see this tool as a demo purpose only and you can restrict it to run it only for few test cycles (e.g. 4 apps in here)
-   $TESTROUND++;
-   if ($TESTROUND == 4) { last; }
+    $TESTROUND++;
+    if ($TESTROUND == 4) { last; }
 
-      
-   $APKFULLPATH = $SETPATHAPK . "\"" . $_ . "\""; 
 
-   $APKRESULTPATH = $PWD . "\/" . $TESTDIR . "\/" .  "\"" . $_ . "\"";
+    $APKFULLPATH = $SETPATHAPK . "\"" . $_ . "\""; 
 
-   print "\n Going to flush adb messages from the device $SCANDEVICE ...... ";
-   
-   `adb -s $SCANDEVICE logcat -c`; # this will flush all the adb log message history from the device. not performing this step can cause False Postives and overlaps on various app results. If the message history is suppose to be preserved, in that case this can be replaced by another technique where it will collect all the adb log data without flushing it and later chop it based on time stamps.
+    $APKRESULTPATH = $PWD . "\/" . $TESTDIR . "\/" .  "\"" . $_ . "\"";
 
-   sleep(1);
+    print "\n Going to flush adb messages from the device $SCANDEVICE ...... ";
 
-   $ADBLOG4APK = $APKRESULTPATH . "\/" . "adb_log.txt";
- 
-   print "\n Starting to capture all logevents for the application $_ at location :- $ADBLOG4APK \n";
+    `adb -s $SCANDEVICE logcat -c`; # this will flush all the adb log message history from the device. not performing this step can cause False Postives and overlaps on various app results. If the message history is suppose to be preserved, in that case this can be replaced by another technique where it will collect all the adb log data without flushing it and later chop it based on time stamps.
 
-   $TIMEADBSTART  = `date '+%m-%d %H:%M:%S'`;
+    sleep(1);
 
-   $HAPK{$_} -> {adbstart} = $TIMEADBSTART;
+    $ADBLOG4APK = $APKRESULTPATH . "\/" . "adb_log.txt";
 
-   print "\n adb logcat started at this time stamp $TIMEADBSTART \n";
+    print "\n Starting to capture all logevents for the application $_ at location :- $ADBLOG4APK \n";
 
-   $PID4ADBLOG = `./execadblogcat.sh $SCANDEVICE $ADBLOG4APK`;
+    $TIMEADBSTART  = `date '+%m-%d %H:%M:%S'`;
 
-   sleep(1);
+    $HAPK{$_} -> {adbstart} = $TIMEADBSTART;
 
-   $TCPDUMP4APK = $APKRESULTPATH . "\/" . "network_traffic.txt";
+    print "\n adb logcat started at this time stamp $TIMEADBSTART \n";
 
-   print "\n Starting to capture all network traffic for the application $_ at location :- $TCPDUMP4APK \n";
+    $PID4ADBLOG = `./execadblogcat.sh $SCANDEVICE $ADBLOG4APK`;
 
-   $PID4TCPDUMP = `./pktcap.sh $IFACE $HOSTIP $TCPDUMP4APK`;
+    sleep(1);
 
-   sleep(1);
- 
-   print "\n\n Getting ready to install Application $_ from the location ..........$APKFULLPATH";
+    $TCPDUMP4APK = $APKRESULTPATH . "\/" . "network_traffic.txt";
 
-   print "\n\n Installing $_ now :- \n";
- 
-   system("adb -s $SCANDEVICE install $APKFULLPATH");
+    print "\n Starting to capture all network traffic for the application $_ at location :- $TCPDUMP4APK \n";
 
-   sleep($Tm);
+    $PID4TCPDUMP = `./pktcap.sh $IFACE $HOSTIP $TCPDUMP4APK`;
 
-   $LAUNCHAPK = $HAPK{$_} -> {pkgnm}  . "/" . $HAPK{$_} -> {launchact} ;  
- 
-   print " \n Going to launch $_ using the launcher activity $LAUNCHAPK \n";
+    sleep(1);
 
-   system("adb -s $SCANDEVICE shell am start -n $LAUNCHAPK");
+    print "\n\n Getting ready to install Application $_ from the location ..........$APKFULLPATH";
 
-   sleep($Tm);
+    print "\n\n Installing $_ now :- \n";
 
-   $PACKAGENAME = $HAPK{$_} -> {pkgnm};
+    system("adb -s $SCANDEVICE install $APKFULLPATH");
 
-   print "\n Sending random gestures ... \n";
+    sleep($Tm);
 
-   system("adb -s $SCANDEVICE shell monkey -p $PACKAGENAME $RGC");
+    $LAUNCHAPK = $HAPK{$_} -> {pkgnm}  . "/" . $HAPK{$_} -> {launchact} ;  
 
-   sleep($Tm);
+    print " \n Going to launch $_ using the launcher activity $LAUNCHAPK \n";
 
-   print "\n Done testing... uninstalling now .... \n";
+    system("adb -s $SCANDEVICE shell am start -n $LAUNCHAPK");
 
-   system("adb -s $SCANDEVICE uninstall $PACKAGENAME");
-  
-   sleep(1);
- 
-   `./killproc.sh $PID4ADBLOG`;
+    sleep($Tm);
 
-   $TIMEADBSTOP = `date '+%m-%d %H:%M:%S'`;
+    $PACKAGENAME = $HAPK{$_} -> {pkgnm};
 
-   $HAPK{$_} -> {adbstop} = $TIMEADBSTOP;
+    print "\n Sending random gestures ... \n";
 
-   print "\n adb logcat stopped at this time stamp $TIMEADBSTOP \n";
- 
-   `./killproc.sh $PID4TCPDUMP`; #make sure logged in user on a machine has right permission to kill processes, orelse it will be an overlap  
+    system("adb -s $SCANDEVICE shell monkey -p $PACKAGENAME $RGC");
 
-   `killall -v tcpdump` ; #user can also run 'cat sudo_password |killall -v tcpdump' if the logged in user doesn't have enough previlages, however this technique inside the script is not recommended for many reasons
+    sleep($Tm);
+
+    print "\n Done testing... uninstalling now .... \n";
+
+    system("adb -s $SCANDEVICE uninstall $PACKAGENAME");
+
+    sleep(1);
+
+    `./killproc.sh $PID4ADBLOG`;
+
+    $TIMEADBSTOP = `date '+%m-%d %H:%M:%S'`;
+
+    $HAPK{$_} -> {adbstop} = $TIMEADBSTOP;
+
+    print "\n adb logcat stopped at this time stamp $TIMEADBSTOP \n";
+
+    `./killproc.sh $PID4TCPDUMP`; #make sure logged in user on a machine has right permission to kill processes, orelse it will be an overlap  
+
+    `killall -v tcpdump` ; #user can also run 'cat sudo_password |killall -v tcpdump' if the logged in user doesn't have enough previlages, however this technique inside the script is not recommended for many reasons
 
     if($opt_r) {
-    # Shutdown SPADE
-    `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.client.AndroidShutdown"`;
+      # Shutdown SPADE
+      `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.client.AndroidShutdown"`;
 
-    # Pull dot file off from AVD with name the same as the current malware.
-    `adb -s $SCANDEVICE pull /sdcard/spade/output/graph.dot $APKRESULTPATH/graph.dot`;
+      # Pull dot file off from AVD with name the same as the current malware.
+      `adb -s $SCANDEVICE pull /sdcard/spade/output/graph.dot $APKRESULTPATH/graph.dot`;
 
-    # Delete dot file on the device
-    `adb -s $SCANDEVICE shell rm /sdcard/spade/output/graph.dot`;
+      # Delete dot file on the device
+      `adb -s $SCANDEVICE shell rm /sdcard/spade/output/graph.dot`;
     }
   }
 
- }
+}
 
- &avdtestcycle();
+&avdtestcycle();
 
 
 
@@ -919,102 +930,102 @@ if ($opt_s)
 #=================================== PARSERS ====================================================
 
 
- foreach (@ALLFILES)
- {
-   $APK = $_;
+foreach (@ALLFILES)
+{
+  $APK = $_;
 
 #   my @ARRLENGTH = "";
 #   $TESTDIR = "TEST_05_08_12-17:11:32"; # there can be an extra option to cover this case where you have already ran tests using A S E F and collected the data but just want to parse it again, so by poining it to the right test directory, parser will parse those files instead ....
 
-   $TXTADBPKT = $PWD . "\/" . $TESTDIR . "\/" . "\"" . $_ . "\"" . "\/" . "\*\.txt";
+  $TXTADBPKT = $PWD . "\/" . $TESTDIR . "\/" . "\"" . $_ . "\"" . "\/" . "\*\.txt";
 
-   print "\n inside parser module ...... \n";
+  print "\n inside parser module ...... \n";
 
-   print "\n Time when adb log started for the app $_ :- ";
+  print "\n Time when adb log started for the app $_ :- ";
 
-   print $HAPK{$_} -> {adbstart};
+  print $HAPK{$_} -> {adbstart};
 
-   print "\n Time when adb log ended for the app $_ :- ";
+  print "\n Time when adb log ended for the app $_ :- ";
 
-   print $HAPK{$_} -> {adbstop};
+  print $HAPK{$_} -> {adbstop};
 
 
 # Google's Safe Browsing module for accessed URLs ===============================
 
   sub urlaccessed()
   {
-   my $URIFIND = "";
-   my $ACCURL = "";
-   my @ALLURLS = "";
-   my $ENCODEDURL = "";
-   my $URI = URI::Encode->new();
-   my $MALWARE = "";
+    my $URIFIND = "";
+    my $ACCURL = "";
+    my @ALLURLS = "";
+    my $ENCODEDURL = "";
+    my $URI = URI::Encode->new();
+    my $MALWARE = "";
 
-   $URIFIND = `which urifind`;
+    $URIFIND = `which urifind`;
 
-   chomp $URIFIND;
+    chomp $URIFIND;
 
-   if(!$URIFIND)
-   {
-    "\n Can't parse accessed URLs from log files as URI::Find module is not installed in perl ... skipping this module .... please install it and run the tool again ...\n";
+    if(!$URIFIND)
+    {
+      "\n Can't parse accessed URLs from log files as URI::Find module is not installed in perl ... skipping this module .... please install it and run the tool again ...\n";
 
-   return;
-   }
+      return;
+    }
 
 #   @ALLURLS = `$URIFIND -n $TXTADBPKT`;
 
-   sub gsb()
-   {
-    chomp @_;
- 
-    foreach $ACCURL (@_)
+    sub gsb()
     {
-     chomp $ACCURL;
+      chomp @_;
 
-     if(!$ACCURL) { next ; }
-    
-     if($ACCURL =~ m/file\:\/\//)
-     { next; }
+      foreach $ACCURL (@_)
+      {
+        chomp $ACCURL;
+
+        if(!$ACCURL) { next ; }
+
+        if($ACCURL =~ m/file\:\/\//)
+        { next; }
 
 #     print "\n $_ :- Accessed URL :- $ACCURL \n";
- 
-     my $ENCODEDURL = $URI->encode($ACCURL,1);
 
-     chomp $ENCODEDURL;
+        my $ENCODEDURL = $URI->encode($ACCURL,1);
+
+        chomp $ENCODEDURL;
 
 #     print "\n $_ :- utf8 encoded URL :- $ENCODEDURL";
 
 #     print "\n Running it through Google's Safe Browsing API ........ ";
 
-     $MALWARE = `curl -s "https://sb-ssl.google.com/safebrowsing/api/lookup?client=demo-app&apikey=$GAPI&appver=1.5.2&pver=3.0&url=$ENCODEDURL"`;
+        $MALWARE = `curl -s "https://sb-ssl.google.com/safebrowsing/api/lookup?client=demo-app&apikey=$GAPI&appver=1.5.2&pver=3.0&url=$ENCODEDURL"`;
 
-     if($MALWARE)
-     {
-      print "\n ! $_ accessed --> \" $ACCURL \" and it is - $MALWARE\n";
-     }         
-    
-     if(!$MALWARE)
-     {
-      print "\n $_ accessed --> \" $ACCURL \" \n"; 
-     }        
+        if($MALWARE)
+        {
+          print "\n ! $_ accessed --> \" $ACCURL \" and it is - $MALWARE\n";
+        }         
 
+        if(!$MALWARE)
+        {
+          print "\n $_ accessed --> \" $ACCURL \" \n"; 
+        }        
+
+      }
     }
-   }
- 
+
 
     @ALLURLS = `$URIFIND -n $TXTADBPKT`;
 
 #   print @ALLURLS;
 
-   &gsb(@ALLURLS);
-   
-   @ALLURLS = `./destipurl.sh $TXTADBPKT`;
+    &gsb(@ALLURLS);
 
-   chomp @ALLURLS;
+    @ALLURLS = `./destipurl.sh $TXTADBPKT`;
+
+    chomp @ALLURLS;
 
 #   print @ALLURLS;
 
-   &gsb(@ALLURLS);    
+    &gsb(@ALLURLS);    
 
 
   }
@@ -1024,66 +1035,66 @@ if ($opt_s)
   sub datausage()
   {
 
-   my $TEMP0 = 0;
-   my $LEN = "";
+    my $TEMP0 = 0;
+    my $LEN = "";
 
 #   my $TXTADBPKT = $PWD . "\/" . $TESTDIR . "\/" . "\"" . $_ . "\"" . "\/" . "\*\.txt";
 
-   @ARRLENGTH = `./datausage.sh $TXTADBPKT`;
+    @ARRLENGTH = `./datausage.sh $TXTADBPKT`;
 
 #   print @ARRLENGTH;  
 
-   foreach $LEN (@ARRLENGTH)
-   {
-    $TEMP0 = $TEMP0 + $LEN;
-   }
-   
-   print "\n\n Total number of data exchanged during the test cycle by an app $_ is -------------> $TEMP0 bytes \n\n";
+    foreach $LEN (@ARRLENGTH)
+    {
+      $TEMP0 = $TEMP0 + $LEN;
+    }
+
+    print "\n\n Total number of data exchanged during the test cycle by an app $_ is -------------> $TEMP0 bytes \n\n";
 
   }
 
 
-    &datausage();
+  &datausage();
 
   sub vulns()
   {
-   my %HVULN = ""; 
-   my $PKG = "";
-   my $OS = "";
-   my $HVV = "";
-   my $HPV = "";
-   my $LVV = "";
-   my $INFO = "";
-   my $SEV = "";
-   my $CVE = "";
-   my $NOI = "";
-   my $ENTRY = "";
+    my %HVULN = ""; 
+    my $PKG = "";
+    my $OS = "";
+    my $HVV = "";
+    my $HPV = "";
+    my $LVV = "";
+    my $INFO = "";
+    my $SEV = "";
+    my $CVE = "";
+    my $NOI = "";
+    my $ENTRY = "";
 
-   my $TXTSIG = $PWD . "\/" . "vuln2.txt";
+    my $TXTSIG = $PWD . "\/" . "vuln2.txt";
 
-   open(FSIG, $TXTSIG) or die "\n Can't open signature.txt file \n\n";
-   
-   while(<FSIG>)
-   {
+    open(FSIG, $TXTSIG) or die "\n Can't open signature.txt file \n\n";
 
-    if($_ =~ m/(.*?)( pkg\:)('.*?')( os\:)('.*?')( hvv\:)('.*?')( hpv\:)('.*?')( lvv\:)('.*?')( info\:)('.*?')( sev\:)('.*?')( cve\:)('.*?')( noi\:)('.*?')/)
+    while(<FSIG>)
     {
 
-       $ENTRY = $1;
-       $PKG = $3;
-       $OS = $5;
-       $HVV = $7;
-       $HPV = $9;
-       $LVV = $11;
-       $INFO = $13;
-       $SEV = $15;
-       $CVE = $17;
-       $NOI = $19;
-      
-       %HVULN->{$ENTRY} = ( { pkg => $PKG , os => $OS , hvv => $HVV , hpv => $HPV , lvv => $LVV , info => $INFO , sev => $SEV , cve => $CVE , noi => $NOI }, );
-    }
+      if($_ =~ m/(.*?)( pkg\:)('.*?')( os\:)('.*?')( hvv\:)('.*?')( hpv\:)('.*?')( lvv\:)('.*?')( info\:)('.*?')( sev\:)('.*?')( cve\:)('.*?')( noi\:)('.*?')/)
+      {
 
-   }
+        $ENTRY = $1;
+        $PKG = $3;
+        $OS = $5;
+        $HVV = $7;
+        $HPV = $9;
+        $LVV = $11;
+        $INFO = $13;
+        $SEV = $15;
+        $CVE = $17;
+        $NOI = $19;
+
+        %HVULN->{$ENTRY} = ( { pkg => $PKG , os => $OS , hvv => $HVV , hpv => $HPV , lvv => $LVV , info => $INFO , sev => $SEV , cve => $CVE , noi => $NOI }, );
+      }
+
+    }
 
     my $ent = "";
     my $VULNERABLE = "";
@@ -1097,90 +1108,90 @@ if ($opt_s)
     my @ARRAPKVER = "";
     my $i = 0;
     my $SIZE = "";
- 
-  foreach $ent ( keys %HVULN )
-  {
-    
-   $VULNERABLE = "";
- 
-   if ($HVULN{$ent} -> {pkg} eq $HAPK{$APK} -> {pkgnm})
-   {
+
+    foreach $ent ( keys %HVULN )
+    {
+
+      $VULNERABLE = "";
+
+      if ($HVULN{$ent} -> {pkg} eq $HAPK{$APK} -> {pkgnm})
+      {
 
 #    print "\n\n ############## Found a MATCH #################### $HVULN{$ent}{pkg} <--matched--> $HAPK{$APK}{pkgnm}  \n\n";
 #    print $HVULN{$ent} -> {hvv};
 #    print $HAPK{$APK} -> {vername};
 
-    if ($HAPK{$APK} -> {vername})
-    {
-   
-     if ($HAPK{$APK} -> {vername} eq $HVULN{$ent} -> {hvv} || $HAPK{$APK} -> {vername} eq $HVULN{$ent} -> {lvv})
-     {
-       #print "it's vulnerable";
-       $VULNERABLE = "YES"; print "\n Either app version $HAPK{$APK}{vername} matched to hvv $HVULN{$ent}{hvv} or lvv $HVULN{$ent}{lvv}\n\n";
-     }
- 
-     my $HPV = $HVULN{$ent} -> {hpv}; 
-     my $HVV = $HVULN{$ent} -> {hvv};
-     my $LVV = $HVULN{$ent} -> {lvv};
-     my $APKVER = $HAPK{$APK} -> {vername};
- 
-     $HPV =~ s/\'//g;
-     $HVV =~ s/\'//g;
-     $LVV =~ s/\'//g;
-     $APKVER =~ s/\'//g;
+        if ($HAPK{$APK} -> {vername})
+        {
 
-     my @ARRHPV = split ('\.' , $HPV);
-     my @ARRHVV = split ('\.' , $HVV);
-     my @ARRLVV = split ('\.' , $LVV);
-     my @ARRAPKVER = split ('\.' , $APKVER);
-    
-     if(@ARRHPV > @ARRAPKVER)
-     {
-      $SIZE = @ARRHPV;
-     }
-     
-     if(@ARRHVV > @ARRAPKVER)
-     {
-      $SIZE = @ARRHVV;
-     }
-    
-     $SIZE = @ARRAPKVER;
+          if ($HAPK{$APK} -> {vername} eq $HVULN{$ent} -> {hvv} || $HAPK{$APK} -> {vername} eq $HVULN{$ent} -> {lvv})
+          {
+            #print "it's vulnerable";
+            $VULNERABLE = "YES"; print "\n Either app version $HAPK{$APK}{vername} matched to hvv $HVULN{$ent}{hvv} or lvv $HVULN{$ent}{lvv}\n\n";
+          }
 
-     for($i=0 ; $i<=$SIZE; $i++)
-     {
-      if(!$VULNERABLE)
-      {
-       if($ARRAPKVER[$i] < $ARRHVV[$i] && $ARRAPKVER[$i] > $ARRLVV[$i])
-       {
-        #print "it's vulnerable";
-        $VULNERABLE = "YES";  print "\n app version was in between hvv and lvv :- flagged at appversion = $ARRAPKVER[$i] , hvv = $ARRHVV[$i] , lvv = $ARRLVV[$i] \n";
-       }
+          my $HPV = $HVULN{$ent} -> {hpv}; 
+          my $HVV = $HVULN{$ent} -> {hvv};
+          my $LVV = $HVULN{$ent} -> {lvv};
+          my $APKVER = $HAPK{$APK} -> {vername};
+
+          $HPV =~ s/\'//g;
+          $HVV =~ s/\'//g;
+          $LVV =~ s/\'//g;
+          $APKVER =~ s/\'//g;
+
+          my @ARRHPV = split ('\.' , $HPV);
+          my @ARRHVV = split ('\.' , $HVV);
+          my @ARRLVV = split ('\.' , $LVV);
+          my @ARRAPKVER = split ('\.' , $APKVER);
+
+          if(@ARRHPV > @ARRAPKVER)
+          {
+            $SIZE = @ARRHPV;
+          }
+
+          if(@ARRHVV > @ARRAPKVER)
+          {
+            $SIZE = @ARRHVV;
+          }
+
+          $SIZE = @ARRAPKVER;
+
+          for($i=0 ; $i<=$SIZE; $i++)
+          {
+            if(!$VULNERABLE)
+            {
+              if($ARRAPKVER[$i] < $ARRHVV[$i] && $ARRAPKVER[$i] > $ARRLVV[$i])
+              {
+                #print "it's vulnerable";
+                $VULNERABLE = "YES";  print "\n app version was in between hvv and lvv :- flagged at appversion = $ARRAPKVER[$i] , hvv = $ARRHVV[$i] , lvv = $ARRLVV[$i] \n";
+              }
+            }
+          }
+
+          for($i=0 ; $i<=$SIZE; $i++)
+          {
+            if(!$VULNERABLE)
+            {
+              if($ARRAPKVER[$i] < $ARRHPV[$i] && $ARRAPKVER[$i] > $ARRLVV[$i])
+              {
+                #print "it's vulnerable";
+                $VULNERABLE = "YES";  print "\n app version was in between hpv and lvv :- flagged at appversion = $ARRAPKVER[$i] , hvv = $ARRHVV[$i] , lvv = $ARRLVV[$i] \n";
+              }
+            }
+          }
+
+          # print @ARRHVV;
+
+          # print @ARRAPKVER;
+        }
+
+        if($VULNERABLE)
+        {
+          print "\n Found $HAPK{$APK}{pkgnm} to be vulnerable for version $HAPK{$APK}{vername} and from advisory hvv = $HVULN{$ent}{hvv} , hpv = $HVULN{$ent}{hpv} , lvv = $HVULN{$ent}{lvv} , cve = $HVULN{$ent}{cve} , info = $HVULN{$ent}{info} , sev = $HVULN{$ent}{sev} , noi = $HVULN{$ent}{noi} \n";
+        }
       }
-     }
-    
-     for($i=0 ; $i<=$SIZE; $i++)
-     {
-      if(!$VULNERABLE)
-      {
-       if($ARRAPKVER[$i] < $ARRHPV[$i] && $ARRAPKVER[$i] > $ARRLVV[$i])
-       {
-        #print "it's vulnerable";
-        $VULNERABLE = "YES";  print "\n app version was in between hpv and lvv :- flagged at appversion = $ARRAPKVER[$i] , hvv = $ARRHVV[$i] , lvv = $ARRLVV[$i] \n";
-       }
-      }
-     }
-        
-    # print @ARRHVV;
-     
-    # print @ARRAPKVER;
-    }
-   
-     if($VULNERABLE)
-     {
-      print "\n Found $HAPK{$APK}{pkgnm} to be vulnerable for version $HAPK{$APK}{vername} and from advisory hvv = $HVULN{$ent}{hvv} , hpv = $HVULN{$ent}{hpv} , lvv = $HVULN{$ent}{lvv} , cve = $HVULN{$ent}{cve} , info = $HVULN{$ent}{info} , sev = $HVULN{$ent}{sev} , noi = $HVULN{$ent}{noi} \n";
-     }
-   }
- 
+
 #   print "\n\n application name :- $ent";
 #   print "\n packagename :- ";
 #   print $HVULN{$ent} -> {pkg} ;
@@ -1193,10 +1204,10 @@ if ($opt_s)
 #   print "\n app lable :- ";
 #   print $HVULN{$ent} -> {lvv} ;
 #   print $HAPK{$apk} -> {pkgnm};
+    }
+
+
   }
-
-
- }
 
   &vulns();
 
@@ -1209,7 +1220,7 @@ if ($opt_s)
 
 foreach (@APKFILES)
 {
- 
+
  my $APKFULLPATH = $ARGV[0] . "\"" . $_ . "\"";
  my $APKRESPATH = $PWD . "\/" . $APKTESTDIR[$j] . "\/" ; $j++;
  my $APKINSTLOG = $APKRESPATH . "install_log.txt";
@@ -1249,7 +1260,7 @@ foreach (@APKFILES)
 
  my $CNT1 = 0;
  while($CNT1 <= 4) { $CNT1++; print "."; sleep(1); }
- 
+
 
  my $PID4APKKERNLOGBI = "";
  print "\n\nSnapshot :- Taking a snapshot of kernel log before install and storing at $APKKERNLOGBI\n";
@@ -1268,7 +1279,7 @@ foreach (@APKFILES)
 
 
  print "\n\n Installing $_ now :- \n";
- 
+
  system("adb install -s $APKFULLPATH");
 
 
