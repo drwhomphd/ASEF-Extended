@@ -18,7 +18,11 @@ Modifications by Nathaniel "DrWhom" Husted <nhusted@gmail.com>
 
 ## Installation ##
 
-1. Clone the ASEF Extended repository from Bitbucket
+1. Clone the ASEF Extended repository from Github
+2. Add the Google Android SDK 'tools' and 'platform-tools' directories to your PATH environmental variables.
+  * In MAC OSX you will edit ~/.profile
+  * In Linux you can edit ~/.bash\_profile or ~/.bash\_rc
+  * A guide on the PATH environmental variable: http://www.troubleshooters.com/linux/prepostpath.htm
 2. Modify the configurator.txt file for your preferred settings
 3. Execute apkeval.pl
 
