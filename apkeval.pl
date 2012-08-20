@@ -629,7 +629,7 @@ sub avdlauncher()
 
     # We're starting without a pre-created snapshot so set the partition size
     if(!$opt_n) {
-      $CMD4AVDLAUNCH = "emulator -avd $dAVD -partition-size 1024";
+      $CMD4AVDLAUNCH = "emulator -avd $dAVD -partition-size 1024 -wipe-data -no-snapshot-load";
       print "\n Starting the emulator for AVD $dAVD with 1GB Internal Storage & 1 GB SD Card :-  \n\n";
     }
     else {
