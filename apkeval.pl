@@ -748,14 +748,6 @@ sub avdlauncher()
 
   }
 
-  if($opt_r) {
-    # Startup the SPADE kernel by manually running the dalvikvm on the
-    # android-spade jar file.
-    print "\n Starting SPADE. \n";
-
-    `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.core.Kernel &"`;
-  }
-
 
 }
 
@@ -865,6 +857,15 @@ sub avdtestcycle()
     $PID4TCPDUMP = `./pktcap.sh $IFACE $HOSTIP $TCPDUMP4APK`;
 
     sleep(1);
+  
+    if($opt_r) {
+      # Startup the SPADE kernel by manually running the dalvikvm on the
+      # android-spade jar file.
+      print "\n Starting SPADE to capture system call provenance. \n";
+
+      `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.core.Kernel &"`;
+    }
+
 
     print "\n\n Getting ready to install Application $_ from the location ..........$APKFULLPATH";
 
