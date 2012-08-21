@@ -822,8 +822,8 @@ sub avdtestcycle()
   {
 
 # Use this $TESTROUND if you want to just see this tool as a demo purpose only and you can restrict it to run it only for few test cycles (e.g. 4 apps in here)
-    $TESTROUND++;
-    if ($TESTROUND == 4) { last; }
+    #$TESTROUND++;
+    #if ($TESTROUND == 4) { last; }
 
 
     $APKFULLPATH = $SETPATHAPK . "\"" . $_ . "\""; 
