@@ -864,6 +864,7 @@ sub avdtestcycle()
       print "\n Starting SPADE to capture system call provenance. \n";
 
       `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.core.Kernel &"`;
+      sleep(1);
     }
 
 
@@ -915,7 +916,9 @@ sub avdtestcycle()
       print "\n Shutting down SPADE \n";
       `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.client.AndroidShutdown"`;
 
-      print "\n Saving SPADE grpah data to $APKRESULTPATH/graph.dot \n";
+      sleep(1);
+
+      print "\n Saving SPADE graph data to $APKRESULTPATH/graph.dot \n";
       # Pull dot file off from AVD with name the same as the current malware.
       `adb -s $SCANDEVICE pull /sdcard/spade/output/graph.dot $APKRESULTPATH/graph.dot`;
 
