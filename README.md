@@ -15,6 +15,7 @@ Modifications by Nathaniel "DrWhom" Husted <nhusted@gmail.com>
   * URI::Find;
   * URI::Encode
 * Git
+* Curl
 
 ## Installation ##
 
