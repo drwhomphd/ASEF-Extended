@@ -25,7 +25,8 @@ Modifications by Nathaniel "DrWhom" Husted <nhusted@gmail.com>
   * In Linux you can edit ~/.bash\_profile or ~/.bash\_rc
   * A guide on the PATH environmental variable: http://www.troubleshooters.com/linux/prepostpath.htm
 2. Modify the configurator.txt file for your preferred settings
-3. Execute apkeval.pl
+3. If using SPADE, a custom built AVD file is needed. Rough instructions can be found at:  http://cgi.cs.indiana.edu/~nhusted/dokuwiki/doku.php?id=development:customavd
+4. Execute apkeval.pl
 
 ## Details ##
 
