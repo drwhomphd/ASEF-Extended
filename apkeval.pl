@@ -860,11 +860,18 @@ sub avdtestcycle()
   
     if($opt_r) {
       # Startup the SPADE kernel by manually running the dalvikvm on the
-      # android-spade jar file.
+      # android-spade jar file. Has to be run in a thread because the
+      # SPADE and the dalvik vm don't like being started in the background
+      # for some reason.
       print "\n Starting SPADE to capture system call provenance. \n";
 
-      `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.core.Kernel &"`;
-      sleep(1);
+      my $PID4SPADE = fork();
+      if (defined($PID4SPADE) && $PID4SPADE==0)
+      {
+        exec("adb", "-s", "$SCANDEVICE", "shell", "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.core.Kernel");
+
+      }
+      sleep(120);
     }
 
 
