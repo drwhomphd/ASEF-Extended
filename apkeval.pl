@@ -25,6 +25,12 @@ use URI::Encode;
 getopts('ha:p:dsenr');
 
 our($opt_h, $opt_a, $opt_p, $opt_d, $opt_s, $opt_e, $opt_n, $opt_r);
+# SPADE Startup delay
+# Number of seconds to wait for SPADE to start.
+# Decrease to ~20-30 if your snapshot already has the SPADE binaries DexOpted. This would
+# have been done if you started spade (make spade-kernel) prior before saving
+# your snapshot.
+our $SPADESTARTUP = 120;
 
 our $SCANDEVICE = ""; # default device (virtual/phone) on which all the scans will run
 our $SCANDRUN = ""; # found scan device to be attached
@@ -871,7 +877,8 @@ sub avdtestcycle()
         exec("adb", "-s", "$SCANDEVICE", "shell", "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar' spade.core.Kernel");
 
       }
-      sleep(120);
+
+      sleep($SPADESTARTUP);
     }
 
 
