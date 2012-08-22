@@ -868,7 +868,7 @@ sub avdtestcycle()
       my $PID4SPADE = fork();
       if (defined($PID4SPADE) && $PID4SPADE==0)
       {
-        exec("adb", "-s", "$SCANDEVICE", "shell", "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.core.Kernel");
+        exec("adb", "-s", "$SCANDEVICE", "shell", "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar' spade.core.Kernel");
 
       }
       sleep(120);
@@ -921,7 +921,7 @@ sub avdtestcycle()
       # Shutdown SPADE
       
       print "\n Shutting down SPADE \n";
-      `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar:../../android-lib/h2-dex.jar' spade.client.AndroidShutdown"`;
+      `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar' spade.client.AndroidShutdown"`;
 
       sleep(1);
 
