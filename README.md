@@ -17,6 +17,8 @@ Modifications by Nathaniel "DrWhom" Husted <nhusted@gmail.com>
 * Git
 * Curl
 
+Ubuntu prior to 12.04 does not have a URI::Encode package available. Mac Ports also does not have packages available. In both cases CPAN can be used to download the URI/Find.pm and URI/Encode.pm packages.
+
 ## Installation ##
 
 1. Clone the ASEF Extended repository from Github
