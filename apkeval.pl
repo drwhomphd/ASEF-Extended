@@ -21,7 +21,6 @@ use Getopt::Std;
 use URI::Find;
 use URI::Encode;
 
-
 getopts('ha:p:dsenr');
 
 our($opt_h, $opt_a, $opt_p, $opt_d, $opt_s, $opt_e, $opt_n, $opt_r);
@@ -62,7 +61,8 @@ our $APK = ""; # apk file being worked on
 our $RGC = ""; # no of gestures to send to an app. more no gestures may trigger more behaviors but it can cause app to crash and even emulator. default no of gestures is 55.
 our $Tm = ""; # merination time of an app. in other words, the amount of time delay between stages of test cycle. larger the Tm time, longer the app will spend in test cycle and more data will be collectedcw.it increases the idle time in the test cycle.
 
-
+# Autoflush stdout
+$|++;
 
 # Help function will be called if no arguments were given or if -h was provided as an arguemnt
 
@@ -79,7 +79,7 @@ sub help()
  -s "select the scan device to be the device id listed in configurator file"
  -e "extensive scan mode where it will collect kernel logs, memory dump, running process at each stage"
  -n "use a pre-existing snapshot of an emulated virtual devices (disables SDCard creation on startup)"
- -r "collect data with the SPADE providence system. SPADE must be preinstalled into a snapshot enabled emulated virtual device. REQUIRES -n"
+ -r "collect data with the SPADE provenance system. SPADE must be preinstalled into a snapshot enabled emulated virtual device. REQUIRES -n"
 
 EOF
   exit;
@@ -865,22 +865,42 @@ sub avdtestcycle()
     sleep(1);
   
     if($opt_r) {
-      # Startup the SPADE kernel by manually running the dalvikvm on the
-      # android-spade jar file. Has to be run in a thread because the
-      # SPADE and the dalvik vm don't like being started in the background
-      # for some reason.
-      print "\n Starting SPADE to capture system call provenance. \n";
 
-      my $PID4SPADE = fork();
-      if (defined($PID4SPADE) && $PID4SPADE==0)
-      {
-        exec("adb", "-s", "$SCANDEVICE", "shell", "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar' spade.core.Kernel");
+        # Start the SPADE application 
 
-      }
 
-      sleep($SPADESTARTUP);
+        print "\n Starting SPADE to capture system call provenance. \n";
+
+        # my $PID4SPADE = fork();
+        # if (defined($PID4SPADE) && $PID4SPADE==0)
+        # {
+
+        # exec("adb", "install", "-r", "bin/SPADEAndroid-debug.apk");
+        # exec("adb", "shell", "am", "start", "-n", "spade.android/spade.android.Main");
+
+        print "adb -s $SCANDEVICE shell am start -n spade.android/spade.android.Main";
+        `adb -s $SCANDEVICE shell am start -n spade.android/spade.android.Main`;
+        sleep(1);
+        print "adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action start";
+        `adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action start`;
+
+        my $CNT = 0;
+        while( ($CNT < 10) && (!`cat bootlog.txt |grep "SPADE: Launch complete - Running Now"`) )
+        { 
+            sleep(1); 
+            print "."; 
+            $CNT++;
+        }
+        if ( $CNT >= 10 ) 
+        {
+            print "Unable to detect successful launch of SPADE. Proceeding anyway";
+        } 
+        else 
+        {
+            print "\n SPADE launched\n";
+        }
+        # }
     }
-
 
     print "\n\n Getting ready to install Application $_ from the location ..........$APKFULLPATH";
 
@@ -928,16 +948,17 @@ sub avdtestcycle()
       # Shutdown SPADE
       
       print "\n Shutting down SPADE \n";
-      `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar' spade.client.AndroidShutdown"`;
+      
+      `adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action finish`;
 
-      sleep(1);
+      sleep(3);
 
       print "\n Saving SPADE graph data to $APKRESULTPATH/graph.dot \n";
       # Pull dot file off from AVD with name the same as the current malware.
-      `adb -s $SCANDEVICE pull /sdcard/spade/output/graph.dot $APKRESULTPATH/graph.dot`;
+      `adb -s $SCANDEVICE pull /sdcard/audit.dot $APKRESULTPATH/graph.dot`;
 
       # Delete dot file on the device
-      `adb -s $SCANDEVICE shell rm /sdcard/spade/output/graph.dot`;
+      `adb -s $SCANDEVICE shell rm /sdcard/audit.dot`;
     }
   }
 
