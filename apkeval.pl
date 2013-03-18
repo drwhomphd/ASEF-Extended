@@ -453,7 +453,7 @@ if($opt_p)
 
 
 # Organization mode : converter module
-# converter module converts the matadata associated with .apk files and populates the hash table where they are better organized. It increases the accessebility of the information associated with applications.
+# converter module converts the metadata associated with .apk files and populates the hash table where they are better organized. It increases the accessebility of the information associated with applications.
 
 sub converter()
 {
@@ -607,11 +607,11 @@ print "\n Done creating the Test result hierarchy ....... \n\n";
 # avdlauncher will be called to check if the default device (virtual/phone) is running. If it's found running, it will proceed with the test cycle. If it's not found running then it will be launched.
 
 my $CMD4AVDLAUNCH = "";
-my $PID4AVDLAUNCH = "";
+our $PID4AVDLAUNCH;
 
 sub avdlauncher()
 {
-
+  sleep(3);
   @ARRDEVICES = `adb devices`;
 
   print @ARRDEVICES;
@@ -643,16 +643,14 @@ sub avdlauncher()
       print "\n Starting the emulator for AVD $dAVD with pre-created, default, snapshot:-  \n\n";
     }
 
-
-
-    my $PID4AVDLAUNCH = fork();
-    if (defined($PID4AVDLAUNCH) && $PID4AVDLAUNCH==0)
+    $PID4AVDLAUNCH = fork();
+    if ($PID4AVDLAUNCH==0)
     {
       # running AVD in background process
-      exec("$CMD4AVDLAUNCH &");
+      exec("$CMD4AVDLAUNCH");
+      die "Unable to exec $CMD4AVDLAUNCH: $!";
     }
-
-
+    print "Emulator PID:- $PID4AVDLAUNCH\n\n";
   }
 
   my $FLAG = 0;
@@ -690,7 +688,7 @@ sub avdlauncher()
         print "\n\n $dAVD came to life.... and now it's in online mode ..... \n\n";
 
         $SCANDEVICE = $1;
-
+        print "./execadblogcat.sh $SCANDEVICE bootlog.txt";
         $PID4BL = `./execadblogcat.sh $SCANDEVICE bootlog.txt`;
 
         print "\n Waiting for $dAVD to complete the boot process....";
@@ -713,7 +711,7 @@ sub avdlauncher()
   {
     if(!$opt_n) {
       while(!`cat bootlog.txt |grep "SurfaceFlinger.*Boot is finished"`)
-      { 
+      {
         sleep(1); 
         print "."; 
       }
@@ -735,19 +733,19 @@ sub avdlauncher()
 
     chomp $PID4BL;
 
-    `./killproc.sh $PID4BL`;
+    # `./killproc.sh $PID4BL`;
 
-#   print "\n Invisible swipe coming in 15 seconds............";
+    # print "\n Invisible swipe coming in 15 seconds............";
 
-    my $CNT = 0;
+    # my $CNT = 0;
 
-    while($CNT <= 15) 
-    { 
-      $CNT++; 
-      print "."; 
-      sleep(1); 
-    }
-
+    # while($CNT <= 15) 
+    # { 
+    #   $CNT++; 
+    #   print "."; 
+    #   sleep(1); 
+    # }
+    sleep(1);
     `adb -s $SCANDEVICE shell input keyevent 82`;
 
     print "\n AVD unlocked !\n";
@@ -760,7 +758,7 @@ sub avdlauncher()
 
 # call virtual device launcher module only if the -s option is not selected. if user wants to run all the tests on physical android device, -s can be selected and virtual device boot process will be bypassed....
 
-if (!$opt_s)
+if (!$opt_s && !$opt_r)
 {
 
   print "\n\n Calling AVD LAUNCHER module ...... \n\n";
@@ -826,11 +824,15 @@ sub avdtestcycle()
 
   foreach (@ALLFILES)
   {
-
-# Use this $TESTROUND if you want to just see this tool as a demo purpose only and you can restrict it to run it only for few test cycles (e.g. 4 apps in here)
+    print "========= TEST CYCLE FOR $_ ===========";
+    # Use this $TESTROUND if you want to just see this tool as a demo purpose only and you can restrict it to run it only for few test cycles (e.g. 4 apps in here)
     #$TESTROUND++;
     #if ($TESTROUND == 4) { last; }
 
+    if($opt_r) {
+      # SPADE requires an emulation restart for each run
+      &avdlauncher();
+    }
 
     $APKFULLPATH = $SETPATHAPK . "\"" . $_ . "\""; 
 
@@ -840,52 +842,121 @@ sub avdtestcycle()
 
     `adb -s $SCANDEVICE logcat -c`; # this will flush all the adb log message history from the device. not performing this step can cause False Postives and overlaps on various app results. If the message history is suppose to be preserved, in that case this can be replaced by another technique where it will collect all the adb log data without flushing it and later chop it based on time stamps.
 
-    sleep(1);
+    ####
+    # sleep(1);
 
-    $ADBLOG4APK = $APKRESULTPATH . "\/" . "adb_log.txt";
+    # $ADBLOG4APK = $APKRESULTPATH . "\/" . "adb_log.txt";
 
-    print "\n Starting to capture all logevents for the application $_ at location :- $ADBLOG4APK \n";
+    # print "\n Starting to capture all logevents for the application $_ at location :- $ADBLOG4APK \n";
 
-    $TIMEADBSTART  = `date '+%m-%d %H:%M:%S'`;
+    # $TIMEADBSTART  = `date '+%m-%d %H:%M:%S'`;
 
-    $HAPK{$_} -> {adbstart} = $TIMEADBSTART;
+    # $HAPK{$_} -> {adbstart} = $TIMEADBSTART;
 
-    print "\n adb logcat started at this time stamp $TIMEADBSTART \n";
+    # print "\n adb logcat started at this time stamp $TIMEADBSTART \n";
 
-    $PID4ADBLOG = `./execadblogcat.sh $SCANDEVICE $ADBLOG4APK`;
+    # $PID4ADBLOG = `./execadblogcat.sh $SCANDEVICE $ADBLOG4APK`;
 
-    sleep(1);
+    # sleep(1);
 
-    $TCPDUMP4APK = $APKRESULTPATH . "\/" . "network_traffic.txt";
+    # $TCPDUMP4APK = $APKRESULTPATH . "\/" . "network_traffic.txt";
 
-    print "\n Starting to capture all network traffic for the application $_ at location :- $TCPDUMP4APK \n";
+    # print "\n Starting to capture all network traffic for the application $_ at location :- $TCPDUMP4APK \n";
 
-    $PID4TCPDUMP = `./pktcap.sh $IFACE $HOSTIP $TCPDUMP4APK`;
+    # print "./pktcap.sh $IFACE $HOSTIP $TCPDUMP4APK";
+    # $PID4TCPDUMP = `./pktcap.sh $IFACE $HOSTIP $TCPDUMP4APK`;
 
-    sleep(1);
+    # sleep(1);
   
+    # if($opt_r) {
+
+    #     # Start the SPADE application 
+
+
+    #     print "\n Starting SPADE to capture system call provenance. \n";
+
+    #     # my $PID4SPADE = fork();
+    #     # if (defined($PID4SPADE) && $PID4SPADE==0)
+    #     # {
+
+    #     # exec("adb", "install", "-r", "bin/SPADEAndroid-debug.apk");
+    #     # exec("adb", "shell", "am", "start", "-n", "spade.android/spade.android.Main");
+
+    #     #### 
+    #     `adb -s $SCANDEVICE shell am start -n spade.android/spade.android.Main`;
+    #     sleep(1);
+    #     print "adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action start";
+    #     `adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action start`;
+
+    #     my $CNT = 0;
+    #     while( ($CNT < $SPADESTARTUP) && (!`cat bootlog.txt |grep "SPADE: Launch complete - Running Now"`) )
+    #     { 
+    #         sleep(1); 
+    #         print "."; 
+    #         $CNT++;
+    #     }
+    #     if ( $CNT >= $SPADESTARTUP ) 
+    #     {
+    #         print "Unable to detect successful launch of SPADE. Proceeding anyway";
+    #     } 
+    #     else 
+    #     {
+    #         print "\n SPADE launched\n";
+    #     }
+    #     # }
+    # }
+
+    # print "\n\n Getting ready to install Application $_ from the location ..........$APKFULLPATH";
+
+    # print "\n\n Installing $_ now :- \n";
+
+    # system("adb -s $SCANDEVICE install $APKFULLPATH");
+
+    # sleep($Tm);
+
+    # $LAUNCHAPK = $HAPK{$_} -> {pkgnm}  . "/" . $HAPK{$_} -> {launchact} ;  
+
+    # print " \n Going to launch $_ using the launcher activity $LAUNCHAPK \n";
+
+    # system("adb -s $SCANDEVICE shell am start -n $LAUNCHAPK");
+
+    # sleep($Tm);
+
+    # $PACKAGENAME = $HAPK{$_} -> {pkgnm};
+
+    # print "\n Sending random gestures ... \n";
+
+    # system("adb -s $SCANDEVICE shell monkey -p $PACKAGENAME $RGC");
+
+    # sleep($Tm);
+
+    # print "\n Done testing... uninstalling now .... \n";
+
+    # system("adb -s $SCANDEVICE uninstall $PACKAGENAME");
+
+    # sleep(1);
+
+    # `./killproc.sh $PID4ADBLOG`;
+
+    # $TIMEADBSTOP = `date '+%m-%d %H:%M:%S'`;
+
+    # $HAPK{$_} -> {adbstop} = $TIMEADBSTOP;
+
+    # print "\n adb logcat stopped at this time stamp $TIMEADBSTOP \n";
+
+    # `./killproc.sh $PID4TCPDUMP`; #make sure logged in user on a machine has right permission to kill processes, orelse it will be an overlap  
+
+    # `killall -v tcpdump` ; #user can also run 'cat sudo_password |killall -v tcpdump' if the logged in user doesn't have enough previlages, however this technique inside the script is not recommended for many reasons
+
     if($opt_r) {
-
-        # Start the SPADE application 
-
-
-        print "\n Starting SPADE to capture system call provenance. \n";
-
-        # my $PID4SPADE = fork();
-        # if (defined($PID4SPADE) && $PID4SPADE==0)
-        # {
-
-        # exec("adb", "install", "-r", "bin/SPADEAndroid-debug.apk");
-        # exec("adb", "shell", "am", "start", "-n", "spade.android/spade.android.Main");
-
-        print "adb -s $SCANDEVICE shell am start -n spade.android/spade.android.Main";
-        `adb -s $SCANDEVICE shell am start -n spade.android/spade.android.Main`;
-        sleep(1);
-        print "adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action start";
-        `adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action start`;
-
-        my $CNT = 0;
-        while( ($CNT < 10) && (!`cat bootlog.txt |grep "SPADE: Launch complete - Running Now"`) )
+      # Shutdown SPADE
+      
+      print "\n Shutting down SPADE \n";
+      
+      # `adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action finish`;
+      `adb shell touch /sdcard/shutdown`;
+      my $CNT=0;
+        while( ($CNT < 10) && (!`cat bootlog.txt |grep "SPADE: Shutdown Complete"`) )
         { 
             sleep(1); 
             print "."; 
@@ -893,65 +964,12 @@ sub avdtestcycle()
         }
         if ( $CNT >= 10 ) 
         {
-            print "Unable to detect successful launch of SPADE. Proceeding anyway";
+            print "\nUnable to detect normal shutdown of SPADE. Proceeding anyway\n";
         } 
         else 
         {
-            print "\n SPADE launched\n";
+            print "\n SPADE shutdown\n";
         }
-        # }
-    }
-
-    print "\n\n Getting ready to install Application $_ from the location ..........$APKFULLPATH";
-
-    print "\n\n Installing $_ now :- \n";
-
-    system("adb -s $SCANDEVICE install $APKFULLPATH");
-
-    sleep($Tm);
-
-    $LAUNCHAPK = $HAPK{$_} -> {pkgnm}  . "/" . $HAPK{$_} -> {launchact} ;  
-
-    print " \n Going to launch $_ using the launcher activity $LAUNCHAPK \n";
-
-    system("adb -s $SCANDEVICE shell am start -n $LAUNCHAPK");
-
-    sleep($Tm);
-
-    $PACKAGENAME = $HAPK{$_} -> {pkgnm};
-
-    print "\n Sending random gestures ... \n";
-
-    system("adb -s $SCANDEVICE shell monkey -p $PACKAGENAME $RGC");
-
-    sleep($Tm);
-
-    print "\n Done testing... uninstalling now .... \n";
-
-    system("adb -s $SCANDEVICE uninstall $PACKAGENAME");
-
-    sleep(1);
-
-    `./killproc.sh $PID4ADBLOG`;
-
-    $TIMEADBSTOP = `date '+%m-%d %H:%M:%S'`;
-
-    $HAPK{$_} -> {adbstop} = $TIMEADBSTOP;
-
-    print "\n adb logcat stopped at this time stamp $TIMEADBSTOP \n";
-
-    `./killproc.sh $PID4TCPDUMP`; #make sure logged in user on a machine has right permission to kill processes, orelse it will be an overlap  
-
-    `killall -v tcpdump` ; #user can also run 'cat sudo_password |killall -v tcpdump' if the logged in user doesn't have enough previlages, however this technique inside the script is not recommended for many reasons
-
-    if($opt_r) {
-      # Shutdown SPADE
-      
-      print "\n Shutting down SPADE \n";
-      
-      `adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action finish`;
-
-      sleep(3);
 
       print "\n Saving SPADE graph data to $APKRESULTPATH/graph.dot \n";
       # Pull dot file off from AVD with name the same as the current malware.
@@ -959,7 +977,15 @@ sub avdtestcycle()
 
       # Delete dot file on the device
       `adb -s $SCANDEVICE shell rm /sdcard/audit.dot`;
+
+      $SCANDEVICE="";
+      `kill -1 $PID4AVDLAUNCH`;
+      `killall -v emulator64-arm`; # Ugly hack!
+      `killall -v emulator`; # Further Ugly hack!
+      sleep(1);
     }
+    `./killproc.sh $PID4BL`;
+    sleep(1);
   }
 
 }
