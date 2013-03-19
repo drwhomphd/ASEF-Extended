@@ -612,7 +612,7 @@ our $PROC4AVDLAUNCH;
 
 sub avdlauncher()
 {
-  sleep(3);
+  sleep(1);
   @ARRDEVICES = `adb devices`;
 
   print @ARRDEVICES;
@@ -684,7 +684,7 @@ sub avdlauncher()
         print "\n\n $dAVD came to life.... and now it's in online mode ..... \n\n";
 
         $SCANDEVICE = $1;
-        print "./execadblogcat.sh $SCANDEVICE bootlog.txt";
+
         $PID4BL = `./execadblogcat.sh $SCANDEVICE bootlog.txt`;
 
         print "\n Waiting for $dAVD to complete the boot process....";
@@ -838,7 +838,6 @@ sub avdtestcycle()
 
     `adb -s $SCANDEVICE logcat -c`; # this will flush all the adb log message history from the device. not performing this step can cause False Postives and overlaps on various app results. If the message history is suppose to be preserved, in that case this can be replaced by another technique where it will collect all the adb log data without flushing it and later chop it based on time stamps.
 
-    ####
     sleep(1);
 
     $ADBLOG4APK = $APKRESULTPATH . "\/" . "adb_log.txt";
@@ -871,17 +870,10 @@ sub avdtestcycle()
 
         print "\n Starting SPADE to capture system call provenance. \n";
 
-        # my $PID4SPADE = fork();
-        # if (defined($PID4SPADE) && $PID4SPADE==0)
-        # {
-
-        # exec("adb", "install", "-r", "bin/SPADEAndroid-debug.apk");
-        # exec("adb", "shell", "am", "start", "-n", "spade.android/spade.android.Main");
-
-        #### 
         `adb -s $SCANDEVICE shell am start -n spade.android/spade.android.Main`;
+
         sleep(1);
-        print "adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action start";
+
         `adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action start`;
 
         my $CNT = 0;
@@ -899,7 +891,6 @@ sub avdtestcycle()
         {
             print "\n SPADE launched\n";
         }
-        # }
     }
 
     print "\n\n Getting ready to install Application $_ from the location ..........$APKFULLPATH";
@@ -964,7 +955,7 @@ sub avdtestcycle()
         } 
         else 
         {
-            print "\n SPADE shutdown\n";
+            print "\n SPADE shutdown complete\n";
         }
 
       print "\n Saving SPADE graph data to $APKRESULTPATH/graph.dot \n";
