@@ -20,7 +20,7 @@ use strict;
 use Getopt::Std;
 use URI::Find;
 use URI::Encode;
-
+use Proc::Background;
 
 getopts('ha:p:dsenr');
 
@@ -62,7 +62,8 @@ our $APK = ""; # apk file being worked on
 our $RGC = ""; # no of gestures to send to an app. more no gestures may trigger more behaviors but it can cause app to crash and even emulator. default no of gestures is 55.
 our $Tm = ""; # merination time of an app. in other words, the amount of time delay between stages of test cycle. larger the Tm time, longer the app will spend in test cycle and more data will be collectedcw.it increases the idle time in the test cycle.
 
-
+# Autoflush stdout
+$|++;
 
 # Help function will be called if no arguments were given or if -h was provided as an arguemnt
 
@@ -79,7 +80,7 @@ sub help()
  -s "select the scan device to be the device id listed in configurator file"
  -e "extensive scan mode where it will collect kernel logs, memory dump, running process at each stage"
  -n "use a pre-existing snapshot of an emulated virtual devices (disables SDCard creation on startup)"
- -r "collect data with the SPADE providence system. SPADE must be preinstalled into a snapshot enabled emulated virtual device. REQUIRES -n"
+ -r "collect data with the SPADE provenance system. SPADE must be preinstalled into a snapshot enabled emulated virtual device. REQUIRES -n"
 
 EOF
   exit;
@@ -453,7 +454,7 @@ if($opt_p)
 
 
 # Organization mode : converter module
-# converter module converts the matadata associated with .apk files and populates the hash table where they are better organized. It increases the accessebility of the information associated with applications.
+# converter module converts the metadata associated with .apk files and populates the hash table where they are better organized. It increases the accessebility of the information associated with applications.
 
 sub converter()
 {
@@ -607,11 +608,11 @@ print "\n Done creating the Test result hierarchy ....... \n\n";
 # avdlauncher will be called to check if the default device (virtual/phone) is running. If it's found running, it will proceed with the test cycle. If it's not found running then it will be launched.
 
 my $CMD4AVDLAUNCH = "";
-my $PID4AVDLAUNCH = "";
+our $PROC4AVDLAUNCH;
 
 sub avdlauncher()
 {
-
+  sleep(1);
   @ARRDEVICES = `adb devices`;
 
   print @ARRDEVICES;
@@ -642,17 +643,10 @@ sub avdlauncher()
       $CMD4AVDLAUNCH = "emulator -avd $dAVD -no-snapshot-save";
       print "\n Starting the emulator for AVD $dAVD with pre-created, default, snapshot:-  \n\n";
     }
-
-
-
-    my $PID4AVDLAUNCH = fork();
-    if (defined($PID4AVDLAUNCH) && $PID4AVDLAUNCH==0)
-    {
-      # running AVD in background process
-      exec("$CMD4AVDLAUNCH &");
-    }
-
-
+    
+    $PROC4AVDLAUNCH = Proc::Background->new($CMD4AVDLAUNCH);
+    $PROC4AVDLAUNCH->alive;
+    
   }
 
   my $FLAG = 0;
@@ -713,7 +707,7 @@ sub avdlauncher()
   {
     if(!$opt_n) {
       while(!`cat bootlog.txt |grep "SurfaceFlinger.*Boot is finished"`)
-      { 
+      {
         sleep(1); 
         print "."; 
       }
@@ -735,19 +729,19 @@ sub avdlauncher()
 
     chomp $PID4BL;
 
-    `./killproc.sh $PID4BL`;
+    # `./killproc.sh $PID4BL`;
 
-#   print "\n Invisible swipe coming in 15 seconds............";
+    # print "\n Invisible swipe coming in 15 seconds............";
 
-    my $CNT = 0;
+    # my $CNT = 0;
 
-    while($CNT <= 15) 
-    { 
-      $CNT++; 
-      print "."; 
-      sleep(1); 
-    }
-
+    # while($CNT <= 15) 
+    # { 
+    #   $CNT++; 
+    #   print "."; 
+    #   sleep(1); 
+    # }
+    sleep(1);
     `adb -s $SCANDEVICE shell input keyevent 82`;
 
     print "\n AVD unlocked !\n";
@@ -760,7 +754,7 @@ sub avdlauncher()
 
 # call virtual device launcher module only if the -s option is not selected. if user wants to run all the tests on physical android device, -s can be selected and virtual device boot process will be bypassed....
 
-if (!$opt_s)
+if (!$opt_s && !$opt_r)
 {
 
   print "\n\n Calling AVD LAUNCHER module ...... \n\n";
@@ -826,11 +820,15 @@ sub avdtestcycle()
 
   foreach (@ALLFILES)
   {
-
-# Use this $TESTROUND if you want to just see this tool as a demo purpose only and you can restrict it to run it only for few test cycles (e.g. 4 apps in here)
+    print "========= TEST CYCLE FOR $_ ===========";
+    # Use this $TESTROUND if you want to just see this tool as a demo purpose only and you can restrict it to run it only for few test cycles (e.g. 4 apps in here)
     #$TESTROUND++;
     #if ($TESTROUND == 4) { last; }
 
+    if($opt_r) {
+      # We load a new snapshot for each run under SPADE
+      &avdlauncher();
+    }
 
     $APKFULLPATH = $SETPATHAPK . "\"" . $_ . "\""; 
 
@@ -860,27 +858,40 @@ sub avdtestcycle()
 
     print "\n Starting to capture all network traffic for the application $_ at location :- $TCPDUMP4APK \n";
 
+    print "./pktcap.sh $IFACE $HOSTIP $TCPDUMP4APK";
     $PID4TCPDUMP = `./pktcap.sh $IFACE $HOSTIP $TCPDUMP4APK`;
 
     sleep(1);
   
     if($opt_r) {
-      # Startup the SPADE kernel by manually running the dalvikvm on the
-      # android-spade jar file. Has to be run in a thread because the
-      # SPADE and the dalvik vm don't like being started in the background
-      # for some reason.
-      print "\n Starting SPADE to capture system call provenance. \n";
 
-      my $PID4SPADE = fork();
-      if (defined($PID4SPADE) && $PID4SPADE==0)
-      {
-        exec("adb", "-s", "$SCANDEVICE", "shell", "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar' spade.core.Kernel");
+        # Start the SPADE application 
 
-      }
 
-      sleep($SPADESTARTUP);
+        print "\n Starting SPADE to capture system call provenance. \n";
+
+        `adb -s $SCANDEVICE shell am start -n spade.android/spade.android.Main`;
+
+        sleep(1);
+
+        `adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action start`;
+
+        my $CNT = 0;
+        while( ($CNT < $SPADESTARTUP) && (!`cat bootlog.txt |grep "SPADE: Launch complete - Running Now"`) )
+        { 
+            sleep(1); 
+            print "."; 
+            $CNT++;
+        }
+        if ( $CNT >= $SPADESTARTUP ) 
+        {
+            print "Unable to detect successful launch of SPADE. Proceeding anyway";
+        } 
+        else 
+        {
+            print "\n SPADE launched\n";
+        }
     }
-
 
     print "\n\n Getting ready to install Application $_ from the location ..........$APKFULLPATH";
 
@@ -928,17 +939,40 @@ sub avdtestcycle()
       # Shutdown SPADE
       
       print "\n Shutting down SPADE \n";
-      `adb -s $SCANDEVICE shell "cd /sdcard/spade/android-build/bin && dalvikvm -cp 'android-spade.jar' spade.client.AndroidShutdown"`;
-
-      sleep(1);
+      
+      # `adb -s $SCANDEVICE shell am broadcast -a spade.android.CONTROL -e action finish`;
+      `adb shell touch /sdcard/shutdown`;
+      my $CNT=0;
+        while( ($CNT < 10) && (!`cat bootlog.txt |grep "SPADE: Shutdown Complete"`) )
+        { 
+            sleep(1); 
+            print "."; 
+            $CNT++;
+        }
+        if ( $CNT >= 10 ) 
+        {
+            print "\nUnable to detect normal shutdown of SPADE. Proceeding anyway\n";
+        } 
+        else 
+        {
+            print "\n SPADE shutdown complete\n";
+        }
 
       print "\n Saving SPADE graph data to $APKRESULTPATH/graph.dot \n";
       # Pull dot file off from AVD with name the same as the current malware.
-      `adb -s $SCANDEVICE pull /sdcard/spade/output/graph.dot $APKRESULTPATH/graph.dot`;
+      `adb -s $SCANDEVICE pull /sdcard/audit.dot $APKRESULTPATH/graph.dot`;
 
       # Delete dot file on the device
-      `adb -s $SCANDEVICE shell rm /sdcard/spade/output/graph.dot`;
+      `adb -s $SCANDEVICE shell rm /sdcard/audit.dot`;
+
+      $SCANDEVICE="";
+
+      # shutdown the emulator
+      $PROC4AVDLAUNCH->die;
+      $PROC4AVDLAUNCH->wait;
     }
+    `./killproc.sh $PID4BL`;
+    sleep(1);
   }
 
 }

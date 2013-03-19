@@ -14,6 +14,7 @@ Modifications by Nathaniel "DrWhom" Husted <nhusted@gmail.com>
   * Getopt::Std;
   * URI::Find;
   * URI::Encode
+  * PRoc::Background
 * Git
 * Curl
 
@@ -27,7 +28,7 @@ Ubuntu prior to 12.04 does not have a URI::Encode package available. Mac Ports a
   * In Linux you can edit ~/.bash\_profile or ~/.bash\_rc
   * A guide on the PATH environmental variable: http://www.troubleshooters.com/linux/prepostpath.htm
 2. Modify the configurator.txt file for your preferred settings
-3. If using SPADE, a custom built AVD file is needed. Rough instructions can be found at:  http://cgi.cs.indiana.edu/~nhusted/dokuwiki/doku.php?id=development:customavd
+3. If using SPADE, a custom built AVD file is needed. Rough instructions can be found at:  http://cgi.cs.indiana.edu/~nhusted/dokuwiki/doku.php?id=development:customavd. AVD also needs a snapshot with SPADE installed. 
 4. Execute apkeval.pl
 
 ## Details ##
